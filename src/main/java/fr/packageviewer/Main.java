@@ -1,4 +1,4 @@
-package fr.amu.puit;
+package fr.packageviewer;
 
 public class Main {
 	public static void main(String[] args) {
