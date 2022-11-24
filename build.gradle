@@ -8,6 +8,14 @@ version '1.0-SNAPSHOT'
 
 mainClassName = 'fr.amu.puit.Main'
 
+jar{
+    manifest {
+        attributes(
+                'Main-Class': mainClassName
+        )
+    }
+}
+
 repositories {
     mavenCentral()
 }
