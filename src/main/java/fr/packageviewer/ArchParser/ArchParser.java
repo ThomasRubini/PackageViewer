@@ -1,6 +1,7 @@
 package fr.packageviewer.ArchParser;
 
 import java.util.List;
+import org.json.JSONObject;
 
 public class ArchParser {
     /**
@@ -10,8 +11,11 @@ public class ArchParser {
      * @return new Package
      */
     
-    public static Package getPackageTree(String json, int depth){
+    public static Package getPackageTree(String jsonResponse, int depth){
         String name, version, repo, description;
         List<Package> deps;
+
+        // parse the json
+        JSONObject json = new JSONObject(jsonResponse);
     }
 }
