@@ -6,7 +6,7 @@ plugins {
 group 'fr.amu.puit'
 version '1.0-SNAPSHOT'
 
-mainClassName = 'fr.amu.puit.Main'
+mainClassName = 'fr.packageviewer.Main'
 
 jar{
     manifest {
