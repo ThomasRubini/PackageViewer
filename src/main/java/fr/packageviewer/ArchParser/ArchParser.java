@@ -1,13 +1,15 @@
 package fr.packageviewer.ArchParser;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ArchParser {
 
     public String getPackageFromAPI(String packageName){
+
         String jsonStr = """
              {
                  "version": 2,
@@ -66,15 +68,14 @@ public class ArchParser {
 
     /**
      * Will parse the given json and store data in a Package
-     * @param jsonResponse the given json string
+     * @param packageName the packag name to search
      * @param depth depth to search dependencies
      * @return new Package
      */
 
     public Package getPackageTree(String packageName, int depth){
         String name, version, repo, description;
-        JSONArray dependencies;
-        List<Package> deps;
+        List<Package> deps = new ArrayList<>();
 
         // parse the json
         JSONObject json = new JSONObject(getPackageFromAPI(packageName));
@@ -87,7 +88,19 @@ public class ArchParser {
         repo = resultJson.getString("repo");
         description = resultJson.getString("pkgdesc");
 
-        System.out.println(name);
-        return null;
+        // if we're at the maximum depth, return the package without its dependencies
+        if(depth==0){
+            return new Package(name, version, repo, description, Collections.emptyList());
+        } else {
+            for (Object depPackageNameObj : json.getJSONArray("depends")) {
+                // convert object into String
+                String depPackageName = (String) depPackageNameObj;
+                // add package into Package List
+                deps.add(getPackageTree(depPackageName, depth - 1));
+            }
+
+            // TODO this doesn't seem clean
+            return new Package(name, version, repo, description, deps);
+        }
     }
 }
