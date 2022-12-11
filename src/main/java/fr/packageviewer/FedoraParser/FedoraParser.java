@@ -21,6 +21,8 @@ public class FedoraParser {
          * that didn't had an update for a long time, the branch "main" doesn't
          * exist, it's "master", so in the future we'll need to address this 
          * case
+         *
+         * Handle 404 errors lol
          * 
          */
         // create a new http client
@@ -71,24 +73,45 @@ public class FedoraParser {
         return searchedPackagesList;
     }
 
-    public Map<String,String> parseSpecFile(String spec){
-        Map<String,String> results = new HashMap<>();
+    public JSONObject parseSpecFile(String spec){
+        JSONObject json = new JSONObject();
+
+        // resolve macros
+        int baseindex = spec.indexOf("%define");
+        while(baseindex != -1){
+            baseindex += 8;
+            while(spec.charAt(baseindex) == ' ')baseindex++;
+            String macroName = spec.substring(baseindex, spec.indexOf(" ", baseindex));
+            String macroValue = spec.substring(spec.indexOf(" ", baseindex),spec.indexOf("\n", baseindex)).trim();
+            spec = spec.replaceAll("%\\{"+ macroName +"\\}", macroValue);
+            baseindex = spec.indexOf("%define",baseindex);
+        }
+        
+        // parse version
+        int index = spec.indexOf("Version:")+8;
+        String version = spec.substring(index, spec.indexOf("\n",index)).trim();
 
         // parse description
-        String descriptionStart = spec.substring(spec.indexOf("%description")+13);
-        String description = descriptionStart.substring(0,descriptionStart.indexOf("%"));
+        index = spec.indexOf("%description")+13;
+        String description = spec.substring(index,spec.indexOf("%",index));
         
         // parse dependencies
-        int baseindex = spec.indexOf("\nRequires:");
+        baseindex = spec.indexOf("\nRequires:");
+        JSONArray depedencies = new JSONArray();
         while(baseindex != -1){
             baseindex += 10;
             while(spec.charAt(baseindex) == ' ')baseindex++;
             String dep = spec.substring(baseindex,spec.indexOf("\n", baseindex));
             if(dep.contains(" ")) dep = dep.substring(0, dep.indexOf(" "));
-            System.out.println(dep);
+            depedencies.put(dep);
             baseindex = spec.indexOf("\nRequires:",baseindex);
         }
-        return results;
+
+        json.put("depedencies", depedencies);
+        json.put("description", description);
+        json.put("version",version);
+        System.out.println(json);
+        return json;
     }
 
     public Package getPackageTree(String packageName, int depth) {
