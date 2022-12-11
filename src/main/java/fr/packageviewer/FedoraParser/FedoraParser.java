@@ -28,10 +28,13 @@ public class FedoraParser {
         // create a new http client
         HttpClient client = HttpClient.newHttpClient();
         // and create its url
-        HttpRequest request = HttpRequest.newBuilder(URI.create("https://src.fedoraproject.org/rpms/"+packageName+"/raw/main/f/"+packageName+".spec")).build();
+        String url = "https://src.fedoraproject.org/rpms/"+packageName+"/raw/main/f/"+packageName+".spec";
+        HttpRequest request = HttpRequest.newBuilder(URI.create(url)).build();
         // send its url and return the string given
         try {
-            return client.send(request, HttpResponse.BodyHandlers.ofString()).body();
+            String response = client.send(request, HttpResponse.BodyHandlers.ofString()).body();
+            if(response.contains("<!DOCTYPE html>")) return "";
+            return response;
         } catch (IOException|InterruptedException e) {
             e.printStackTrace();
         }
@@ -75,8 +78,8 @@ public class FedoraParser {
 
     public JSONObject parseSpecFile(String spec){
         JSONObject json = new JSONObject();
-
-        // resolve macros
+        if (spec == "") return json;
+         // resolve macros
         int baseindex = spec.indexOf("%define");
         while(baseindex != -1){
             baseindex += 8;
@@ -90,27 +93,32 @@ public class FedoraParser {
         // parse version
         int index = spec.indexOf("Version:")+8;
         String version = spec.substring(index, spec.indexOf("\n",index)).trim();
-
+        
         // parse description
         index = spec.indexOf("%description")+13;
         String description = spec.substring(index,spec.indexOf("%",index));
         
+        // parse name
+        index = spec.indexOf("Name:")+5;
+        String name = spec.substring(index, spec.indexOf("\n",index)).trim();
+
         // parse dependencies
         baseindex = spec.indexOf("\nRequires:");
         JSONArray depedencies = new JSONArray();
         while(baseindex != -1){
             baseindex += 10;
-            while(spec.charAt(baseindex) == ' ')baseindex++;
+            while(spec.charAt(baseindex) == ' '|spec.charAt(baseindex) == '\t')baseindex++;
             String dep = spec.substring(baseindex,spec.indexOf("\n", baseindex));
             if(dep.contains(" ")) dep = dep.substring(0, dep.indexOf(" "));
-            depedencies.put(dep);
+            if(!dep.contains("%")){;
+                depedencies.put(dep);
+            }
             baseindex = spec.indexOf("\nRequires:",baseindex);
         }
-
+        json.put("name", name);
         json.put("depedencies", depedencies);
         json.put("description", description);
         json.put("version",version);
-        System.out.println(json);
         return json;
     }
 
@@ -119,8 +127,29 @@ public class FedoraParser {
         List<Package> deps = new ArrayList<>();
 
         // parse the json
-        String spec = getPackageFromAPI(packageName);
-        return new Package("name", "version", "repo", "description", deps);
-    }
+        JSONObject json = parseSpecFile(getPackageFromAPI(packageName));
+        if(json.isEmpty()){
+            return new Package(packageName+"(not found)", "N/A", "N/A", "N/A", Collections.emptyList());
+        }
+        // get infos except dependencies
+        name = json.getString("name");
+        version = json.getString("version");
+        repo = "rpms/"+packageName;
+        description = json.getString("description");
 
+        // if we're at the maximum depth, return the package without its dependencies
+        if(depth==0){
+            return new Package(name, version, repo, description, Collections.emptyList());
+        } 
+        else {
+            // iterate for every package in the list
+            for (Object depPackageNameObj : json.getJSONArray("depedencies")) {
+                // convert object into String
+                String depPackageName = (String) depPackageNameObj;
+                // add package into Package List
+                deps.add(getPackageTree(depPackageName, depth - 1));
+            }
+            return new Package(name, version, repo, description, deps);
+        }
+    }
 }
