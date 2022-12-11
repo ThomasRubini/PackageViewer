@@ -13,7 +13,7 @@ import org.json.*;
 
 public class FedoraParser {
 
-    private String getPackageFromAPI(String packageName) {
+    public String getPackageFromAPI(String packageName) {
         /* TODO
          *
          * Ok, to retrieve all the data we need about a package we get the 
@@ -71,9 +71,23 @@ public class FedoraParser {
         return searchedPackagesList;
     }
 
-    private Map<String,String> parseSpecFile(String spec){
+    public Map<String,String> parseSpecFile(String spec){
         Map<String,String> results = new HashMap<>();
-        spec.indexOf("%description");
+
+        // parse description
+        String descriptionStart = spec.substring(spec.indexOf("%description")+13);
+        String description = descriptionStart.substring(0,descriptionStart.indexOf("%"));
+        
+        // parse dependencies
+        int baseindex = spec.indexOf("\nRequires:");
+        while(baseindex != -1){
+            baseindex += 10;
+            while(spec.charAt(baseindex) == ' ')baseindex++;
+            String dep = spec.substring(baseindex,spec.indexOf("\n", baseindex));
+            if(dep.contains(" ")) dep = dep.substring(0, dep.indexOf(" "));
+            System.out.println(dep);
+            baseindex = spec.indexOf("\nRequires:",baseindex);
+        }
         return results;
     }
 
