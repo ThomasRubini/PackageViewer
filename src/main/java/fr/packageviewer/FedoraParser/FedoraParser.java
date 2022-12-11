@@ -89,6 +89,16 @@ public class FedoraParser {
             spec = spec.replaceAll("%\\{"+ macroName +"\\}", macroValue);
             baseindex = spec.indexOf("%define",baseindex);
         }
+        baseindex = spec.indexOf("%global");
+        while(baseindex != -1){
+            baseindex += 7;
+            while(spec.charAt(baseindex) == ' ')baseindex++;
+            String macroName = spec.substring(baseindex, spec.indexOf(" ", baseindex));
+            String macroValue = spec.substring(spec.indexOf(" ", baseindex),spec.indexOf("\n", baseindex)).trim();
+            spec = spec.replace("%{"+macroName +"}", macroValue);
+            baseindex = spec.indexOf("%global",baseindex);
+            
+        }
         
         // parse version
         int index = spec.indexOf("Version:")+8;
