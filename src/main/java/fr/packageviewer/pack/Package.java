@@ -1,4 +1,4 @@
-package fr.packageviewer.ArchParser;
+package fr.packageviewer.pack;
 
 import java.util.List;
 

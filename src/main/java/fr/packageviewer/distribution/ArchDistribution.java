@@ -1,8 +1,7 @@
-package fr.packageviewer.ArchParser;
+package fr.packageviewer.distribution;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,13 +9,14 @@ import java.util.List;
 import java.net.http.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import fr.packageviewer.LoggerManager;
+import fr.packageviewer.pack.Package;
+import fr.packageviewer.pack.SearchedPackage;
 import org.json.*;
 
-public class ArchParser {
+public class ArchDistribution implements Distribution {
 
     private static final Logger logger = LoggerManager.getLogger("ArchParser");
 
