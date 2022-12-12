@@ -9,8 +9,8 @@ version '1.0-SNAPSHOT'
 mainClassName = 'fr.packageviewer.Main'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_13
-    targetCompatibility = JavaVersion.VERSION_13
+    sourceCompatibility = JavaVersion.VERSION_15
+    targetCompatibility = JavaVersion.VERSION_15
 }
 
 jar{
