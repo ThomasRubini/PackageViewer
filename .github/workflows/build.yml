@@ -1,0 +1,23 @@
+name: Build
+
+on:
+  push:
+    branches: ['*']
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: Build
+      run: |
+        ./gradlew jar
+        
+    - uses: actions/upload-artifact@v3
+      with:
+        name: PackageViewer jar
+        path: ./build/libs/PackageViewer*.jar
