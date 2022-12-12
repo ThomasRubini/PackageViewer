@@ -109,7 +109,7 @@ public class ArchDistribution implements Distribution {
                 futurePackage.complete(null);
                 return;
             }
-            JSONObject resultJson = json.getJSONArray("results").getJSONObject(0);
+            JSONObject resultJson = resultsArrayJson.getJSONObject(0);
 
             // get infos except dependencies
             name = resultJson.getString("pkgname");
