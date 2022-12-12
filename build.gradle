@@ -19,14 +19,27 @@ jar{
                 'Main-Class': mainClassName
         )
     }
+
+    from {
+        configurations.bundle.filter{
+            it.exists()
+        }.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
 }
 
 repositories {
     mavenCentral()
 }
 
+configurations {
+    bundle
+    implementation.extendsFrom(bundle)
+}
+
 dependencies {
-    implementation 'org.json:json:20220924'
+    bundle 'org.json:json:20220924'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
