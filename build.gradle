@@ -40,6 +40,7 @@ configurations {
 
 dependencies {
     bundle 'org.json:json:20220924'
+    bundle 'com.beust:jcommander:1.78'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
