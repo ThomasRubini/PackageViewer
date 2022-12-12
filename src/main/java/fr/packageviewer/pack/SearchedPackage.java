@@ -1,4 +1,4 @@
-package fr.packageviewer.ArchParser;
+package fr.packageviewer.pack;
 
 public class SearchedPackage {
     private final String name;
