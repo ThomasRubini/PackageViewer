@@ -107,6 +107,7 @@ public class ArchDistribution implements Distribution {
                 // unknown package, probably an abstract dependency
                 logger.fine("Completing callback INVALID for package %s (depth=%s)".formatted(packageName, depth));
                 futurePackage.complete(null);
+                return;
             }
             JSONObject resultJson = json.getJSONArray("results").getJSONObject(0);
 
@@ -117,30 +118,30 @@ public class ArchDistribution implements Distribution {
             description = resultJson.getString("pkgdesc");
 
             // if we're at the maximum depth, return the package without its dependencies
-            if(depth==0){
+            if(depth==0) {
                 logger.fine("Completing callback NODEP for package %s (depth=%s)".formatted(packageName, depth));
                 futurePackage.complete(new Package(name, version, repo, description, Collections.emptyList()));
-            } else {
-                // iterate for every package in the list
-                List<CompletableFuture<Package>> futureDeps = new ArrayList<>();
-                for (Object depPackageNameObj : resultJson.getJSONArray("depends")) {
-                    // convert object into String
-                    String depPackageName = (String) depPackageNameObj;
-                    // add package into Package List
-                    futureDeps.add(getPackageTree(depPackageName, depth - 1));
-                }
-                for(CompletableFuture<Package> future : futureDeps){
-                    try {
-                        deps.add(future.get());
-                    } catch (InterruptedException | ExecutionException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-
-                // TODO this doesn't seem clean
-                logger.fine("Completing callback DEPS for package %s (depth=%s)".formatted(packageName, depth));
-                futurePackage.complete(new Package(name, version, repo, description, deps));
+                return;
             }
+            // iterate for every package in the list
+            List<CompletableFuture<Package>> futureDeps = new ArrayList<>();
+            for (Object depPackageNameObj : resultJson.getJSONArray("depends")) {
+                // convert object into String
+                String depPackageName = (String) depPackageNameObj;
+                // add package into Package List
+                futureDeps.add(getPackageTree(depPackageName, depth - 1));
+            }
+            for(CompletableFuture<Package> future : futureDeps){
+                try {
+                    deps.add(future.get());
+                } catch (InterruptedException | ExecutionException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            // TODO this doesn't seem clean
+            logger.fine("Completing callback DEPS for package %s (depth=%s)".formatted(packageName, depth));
+            futurePackage.complete(new Package(name, version, repo, description, deps));
         }).exceptionally((e2->{
             logger.warning("Error while fetching package %s (depth=%s) from the API : \n%s".formatted(packageName, depth, e2));
             e2.printStackTrace();
