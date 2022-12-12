@@ -29,6 +29,8 @@ public class SearchedPackage {
         this.description = desciption;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "SearchedPackage{name=%s,version=%s,repo=%s,description=%s}".formatted(name, version, repo, description);
+    }
 }

@@ -14,4 +14,8 @@ public class Package extends SearchedPackage {
         this.deps = deps;
     }
 
+    @Override
+    public String toString() {
+        return "Package{SearchedPackage{%s},deps=%s}".formatted(super.toString(), deps);
+    }
 }
