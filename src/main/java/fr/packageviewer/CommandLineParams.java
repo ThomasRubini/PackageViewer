@@ -23,4 +23,12 @@ public class CommandLineParams {
                description = "Linux distribution to search in",
                required = false)
     public String distribution;
+
+    /**
+     * Packet the user want to search
+     */
+    @Parameter(names = {"--packet", "-p"},
+            description = "Packet to search",
+            required = true)
+    public String packet;
 }

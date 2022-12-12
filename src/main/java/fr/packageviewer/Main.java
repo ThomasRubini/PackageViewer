@@ -6,5 +6,6 @@ public class Main {
 		// send the command line arguments to the parser
 		ArgParse.parseArguments(args);
 		System.out.println(ArgParse.getDistribution());
+		System.out.println(ArgParse.getPacket());
 	}
 }
