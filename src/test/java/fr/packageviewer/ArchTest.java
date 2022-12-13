@@ -3,6 +3,7 @@ package fr.packageviewer;
 import fr.packageviewer.distribution.ArchDistribution;
 import fr.packageviewer.distribution.Distribution;
 import fr.packageviewer.pack.Package;
+import fr.packageviewer.pack.SearchedPackage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -56,5 +57,22 @@ public class ArchTest {
 		Distribution arch = new ArchDistribution();
 		Package pack = arch.getPackageTree("bash", 1).get();
 		Assertions.assertFalse(pack.getVersion().isEmpty());
+	}
+
+	@Test
+	public void testThatBashSearchReturnsResults() {
+		Distribution arch = new ArchDistribution();
+		Assertions.assertNotEquals(arch.searchPackage("bash").size(), 0);
+	}
+	@Test
+	public void testThatBashSearchContainsBash() {
+		Distribution arch = new ArchDistribution();
+		for(SearchedPackage pack : arch.searchPackage("bash")){
+			if(pack.getName().equals("bash")){
+				Assertions.assertTrue(true);
+				return;
+			}
+		}
+		Assertions.fail("No package named 'bash' in results");
 	}
 }
