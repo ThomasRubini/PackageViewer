@@ -2,13 +2,11 @@ package fr.packageviewer.distribution;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.net.http.*;
+
+import fr.packageviewer.Pair;
+import fr.packageviewer.parser.AsyncRequestsParser;
 import org.json.*;
 import java.util.concurrent.CompletableFuture;
 import fr.packageviewer.pack.Package;
@@ -17,25 +15,54 @@ import fr.packageviewer.LoggerManager;
 import fr.packageviewer.pack.Package;
 import fr.packageviewer.pack.SearchedPackage;
 
-public class FedoraDistribution implements Distribution {
+public class FedoraDistribution extends AsyncRequestsParser implements Distribution {
 
-    private String getPackageFromAPI(String packageName) {
+    protected CompletableFuture<Pair<Package, Set<String>>> getPackageFromAPI(String packageName) {
         // create a new http client
         HttpClient client = HttpClient.newHttpClient();
         // and create its url
         String url = "https://mdapi.fedoraproject.org/rawhide/pkg/"+packageName+"";
         HttpRequest request = HttpRequest.newBuilder(URI.create(url)).build();
-        // send its url and return the string given
-        try {
-            String response = client.send(request, HttpResponse.BodyHandlers.ofString()).body();
-            if(response.contains("404: Not Found")) return "";
-            return response;
-        } catch (IOException|InterruptedException e) {
-            e.printStackTrace();
-        
-        }
+
+        CompletableFuture<Pair<Package, Set<String>>> futureResult = new CompletableFuture<>();
+        client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenAccept(result->{
+
+            String body = result.body();
+
+            if(body.contains("404: Not Found")) {
+                futureResult.complete(null);
+                return;
+            }
+
+            JSONObject json = new JSONObject(result.body());
+
+            // get infos
+            Set<String> dependenciesNames = new HashSet<>();
+
+            for (Object depPackageObj : json.getJSONArray("requires")) {
+                // convert object into String
+                JSONObject depPackageJson = (JSONObject) depPackageObj;
+                // add package into Package List
+                String depName = depPackageJson.getString("name");
+                if (depName.contains(".so"))
+                    continue;
+                if (depName.contains("/"))
+                    continue;
+                dependenciesNames.add(depName);
+            }
+
+            futureResult.complete(new Pair<>(
+                    new Package(
+                            json.getString("basename"),
+                            json.getString("version"),
+                            json.getString("repo"),
+                            json.getString("description")
+                    ),
+                    dependenciesNames
+            ));
+        });
         // if there's an error, return an empty string
-        return "";
+        return futureResult;
     }
     
     @Override
@@ -72,47 +99,5 @@ public class FedoraDistribution implements Distribution {
                     searchResultJson.getString("description")));
         }
         return searchedPackagesList;
-    }
-
-    public Package getPackageTreeInternal(String packageName, int depth) {
-        String name, version, repo, description;
-        List<Package> deps = new ArrayList<>();
-
-        // parse the json
-        String response = getPackageFromAPI(packageName);
-        if (response == "") {
-            return new Package(packageName + "(not found)", "N/A", "N/A", "N/A", Collections.emptyList());
-        }
-        JSONObject json = new JSONObject(response);
-        // get infos except dependencies
-        name = json.getString("basename");
-        version = json.getString("version");
-        repo = "rpms/" + packageName;
-        description = json.getString("description");
-
-        // if we're at the maximum depth, return the package without its dependencies
-        if (depth == 0) {
-            return new Package(name, version, repo, description, Collections.emptyList());
-        } else {
-            // iterate for every package in the list
-            for (Object depPackageNameObj : json.getJSONArray("requires")) {
-                // convert object into String
-                JSONObject depPackageJSONObj = (JSONObject) depPackageNameObj;
-                // add package into Package List
-                String depName = depPackageJSONObj.getString("name");
-                if (depName.contains(".so"))
-                    continue;
-                if (depName.contains("/"))
-                    continue;
-                deps.add(getPackageTreeInternal(depName, depth - 1));
-            }
-            return new Package(name, version, repo, description, deps);
-        }
-    }
-
-    public CompletableFuture<Package> getPackageTree(String packageName, int depth){
-        return  CompletableFuture.supplyAsync(()->{
-            return getPackageTreeInternal(packageName, depth);
-        });
     }
 }
