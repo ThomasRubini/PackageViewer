@@ -60,6 +60,13 @@ public class ArchTest {
 	}
 
 	@Test
+	public void testInvalidPackageReturnsNull() throws ExecutionException, InterruptedException {
+		Distribution arch = new ArchDistribution();
+		Package pack = arch.getPackageTree("lndhsgudw", 1).get();
+		Assertions.assertNull(pack);
+	}
+
+	@Test
 	public void testThatBashSearchReturnsResults() {
 		Distribution arch = new ArchDistribution();
 		Assertions.assertNotEquals(arch.searchPackage("bash").size(), 0);
