@@ -60,6 +60,11 @@ public CompletableFuture<Pair<Package, Set<String>>> getPackageFromAPI(String pa
                 ),
                 dependenciesNames
         ));
+    }).exceptionally(error ->{
+        error.printStackTrace();
+        logger.warning("Error while fetching package %s from the API : \n%s".formatted(packageName, error));
+        futureResult.complete(null);
+        return null;
     });
 
     return futureResult;
