@@ -67,14 +67,14 @@ public class ArchTest {
 	}
 
 	@Test
-	public void testThatBashSearchReturnsResults() {
+	public void testThatBashSearchReturnsResults() throws ExecutionException, InterruptedException {
 		Distribution arch = new ArchDistribution();
-		Assertions.assertNotEquals(arch.searchPackage("bash").size(), 0);
+		Assertions.assertNotEquals(arch.searchPackage("bash").get().size(), 0);
 	}
 	@Test
-	public void testThatBashSearchContainsBash() {
+	public void testThatBashSearchContainsBash() throws ExecutionException, InterruptedException {
 		Distribution arch = new ArchDistribution();
-		for(SearchedPackage pack : arch.searchPackage("bash")){
+		for(SearchedPackage pack : arch.searchPackage("bash").get()){
 			if(pack.getName().equals("bash")){
 				Assertions.assertTrue(true);
 				return;

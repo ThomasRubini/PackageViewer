@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public interface Distribution {
-	List<SearchedPackage> searchPackage(String packageName);
+	CompletableFuture<List<SearchedPackage>> searchPackage(String packageName);
 	CompletableFuture<Package> getPackageTree(String packageName, int depth);
 }

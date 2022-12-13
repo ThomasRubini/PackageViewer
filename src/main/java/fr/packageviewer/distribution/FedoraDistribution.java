@@ -75,7 +75,7 @@ public class FedoraDistribution extends AsyncRequestsParser implements Distribut
     }
     
     @Override
-    public List<SearchedPackage> searchPackage(String packageName) {
+    public CompletableFuture<List<SearchedPackage>> searchPackage(String packageName) {
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -84,29 +84,31 @@ public class FedoraDistribution extends AsyncRequestsParser implements Distribut
                                 + packageName + "*"))
                 .build();
 
-        HttpResponse<String> response;
-        try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+        CompletableFuture<List<SearchedPackage>> futureSearchedPackages = new CompletableFuture<>();
+
+        client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenAccept(result->{
+            JSONObject json = new JSONObject(result.body());
+
+            List<SearchedPackage> searchedPackagesList = new ArrayList<>();
+
+            // iterate for every package in the list
+            for (Object searchResultObj : json.getJSONArray("projects")) {
+                // convert object into String
+                JSONObject searchResultJson = (JSONObject) searchResultObj;
+                // add package into to list
+                searchedPackagesList.add(new SearchedPackage(
+                        searchResultJson.getString("neofetch"),
+                        null,
+                        searchResultJson.getString("fullname"),
+                        searchResultJson.getString("description")));
+            }
+            futureSearchedPackages.complete(searchedPackagesList);
+        }).exceptionally(error->{
+            error.printStackTrace();
+            futureSearchedPackages.complete(Collections.emptyList());
             return null;
-        }
+        });
 
-        JSONObject json = new JSONObject(response.body());
-
-        List<SearchedPackage> searchedPackagesList = new ArrayList<>();
-
-        // iterate for every package in the list
-        for (Object searchResultObj : json.getJSONArray("projects")) {
-            // convert object into String
-            JSONObject searchResultJson = (JSONObject) searchResultObj;
-            // add package into to list
-            searchedPackagesList.add(new SearchedPackage(
-                    searchResultJson.getString("neofetch"),
-                    null,
-                    searchResultJson.getString("fullname"),
-                    searchResultJson.getString("description")));
-        }
-        return searchedPackagesList;
+        return futureSearchedPackages;
     }
 }
