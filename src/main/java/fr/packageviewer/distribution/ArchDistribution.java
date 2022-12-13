@@ -132,10 +132,14 @@ public class ArchDistribution implements Distribution {
                 futureDeps.add(getPackageTree(depPackageName, depth - 1));
             }
             for(CompletableFuture<Package> future : futureDeps){
+                Package dep;
                 try {
-                    deps.add(future.get());
+                    dep = future.get();
                 } catch (InterruptedException | ExecutionException e) {
                     throw new RuntimeException(e);
+                }
+                if(dep!=null){
+                    deps.add(dep);
                 }
             }
 
