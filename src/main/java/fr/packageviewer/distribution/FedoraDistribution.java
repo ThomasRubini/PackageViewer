@@ -9,6 +9,8 @@ import fr.packageviewer.Pair;
 import fr.packageviewer.parser.AsyncRequestsParser;
 import org.json.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Logger;
+
 import fr.packageviewer.pack.Package;
 import fr.packageviewer.pack.SearchedPackage;
 import fr.packageviewer.LoggerManager;
@@ -16,6 +18,8 @@ import fr.packageviewer.pack.Package;
 import fr.packageviewer.pack.SearchedPackage;
 
 public class FedoraDistribution extends AsyncRequestsParser implements Distribution {
+
+    private static final Logger logger = LoggerManager.getLogger("FedoraDistribution");
 
     protected CompletableFuture<Pair<Package, Set<String>>> getPackageFromAPI(String packageName) {
         // create a new http client
@@ -60,6 +64,11 @@ public class FedoraDistribution extends AsyncRequestsParser implements Distribut
                     ),
                     dependenciesNames
             ));
+        }).exceptionally(error->{
+            error.printStackTrace();
+            logger.warning("Error while fetching package %s from the API : \n%s".formatted(packageName, error));
+            futureResult.complete(null);
+            return null;
         });
         // if there's an error, return an empty string
         return futureResult;

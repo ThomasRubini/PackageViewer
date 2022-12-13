@@ -69,12 +69,12 @@ public abstract class AsyncRequestsParser {
 			// TODO this doesn't seem clean
 			logger.fine("Completing callback DEPS for package %s (depth=%s)".formatted(packageName, depth));
 			futurePackage.complete(pack);
-		}).exceptionally((e2 -> {
-			logger.warning("Error while fetching package %s (depth=%s) from the API : \n%s".formatted(packageName, depth, e2));
-			e2.printStackTrace();
+		}).exceptionally(error -> {
+			error.printStackTrace();
+			logger.warning("Error while manipulating package %s (depth=%s) : \n%s".formatted(packageName, depth, error));
 			futurePackage.complete(null);
 			return null;
-		}));
+		});
 
 		return futurePackage;
 	}
