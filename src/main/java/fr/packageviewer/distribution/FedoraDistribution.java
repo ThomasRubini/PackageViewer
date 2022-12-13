@@ -104,7 +104,7 @@ public class FedoraDistribution implements Distribution {
                     continue;
                 if (depName.contains("/"))
                     continue;
-                deps.add(getPackageTree(depName, depth - 1));
+                deps.add(getPackageTreeInternal(depName, depth - 1));
             }
             return new Package(name, version, repo, description, deps);
         }
