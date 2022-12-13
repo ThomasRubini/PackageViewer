@@ -71,44 +71,46 @@ public CompletableFuture<Pair<Package, Set<String>>> getPackageFromAPI(String pa
 
 }
 
-
 /**
  * Search for a package and return a list of packages
  * @param packageName the package name to search
  * @return
  */
-    public List<SearchedPackage> searchPackage(String packageName){
+    public CompletableFuture<List<SearchedPackage>> searchPackage(String packageName){
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://archlinux.org/packages/search/json/?q="+packageName))
                 .build();
 
-        HttpResponse<String> response;
-        try{
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        }catch(IOException|InterruptedException e){
-            e.printStackTrace();
+        CompletableFuture<List<SearchedPackage>> futureSearchedPackages = new CompletableFuture<>();
+
+        client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenAccept(result->{
+
+            List<SearchedPackage> searchedPackagesList = new ArrayList<>();
+            JSONObject json = new JSONObject(result.body());
+
+            // iterate for every package in the list
+            for (Object searchResultObj : json.getJSONArray("results")) {
+                // convert object into String
+                JSONObject searchResultJson = (JSONObject) searchResultObj;
+                // add package into to list
+                searchedPackagesList.add(new SearchedPackage(
+                    searchResultJson.getString("pkgname"),
+                    searchResultJson.getString("pkgver"),
+                    searchResultJson.getString("repo"),
+                    searchResultJson.getString("pkgdesc")
+                ));
+            }
+           futureSearchedPackages.complete(searchedPackagesList);
+        }).exceptionally(error->{
+            error.printStackTrace();
+            futureSearchedPackages.complete(Collections.emptyList());
             return null;
-        }
+        });
 
-        JSONObject json = new JSONObject(response.body());
 
-        List<SearchedPackage> searchedPackagesList = new ArrayList<>();
 
-        // iterate for every package in the list
-        for (Object searchResultObj : json.getJSONArray("results")) {
-            // convert object into String
-            JSONObject searchResultJson = (JSONObject) searchResultObj;
-            // add package into to list
-            searchedPackagesList.add(new SearchedPackage(
-                searchResultJson.getString("pkgname"),
-                searchResultJson.getString("pkgver"),
-                searchResultJson.getString("repo"),
-                searchResultJson.getString("pkgdesc")
-            ));
-        }
-
-        return searchedPackagesList;
+        return futureSearchedPackages;
 
     }
 }
