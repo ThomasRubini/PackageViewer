@@ -2,37 +2,69 @@ package fr.packageviewer.distribution;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import java.net.http.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
 import fr.packageviewer.LoggerManager;
+import fr.packageviewer.Pair;
 import fr.packageviewer.pack.Package;
 import fr.packageviewer.pack.SearchedPackage;
+import fr.packageviewer.parser.AsyncRequestsParser;
 import org.json.*;
 
-public class ArchDistribution implements Distribution {
+public class ArchDistribution extends AsyncRequestsParser implements Distribution {
 
-    private static final Logger logger = LoggerManager.getLogger("ArchParser");
+    private static final Logger logger = LoggerManager.getLogger("ArchDistribution");
 
 /**
  * Will return the String json of the package from the Arch Linux API
  * @param packageName the package name to get the json from
  * @return json of the package
   */
-    public CompletableFuture<HttpResponse<String>> getPackageFromAPI(String packageName) {
-        // create a new http client
-        HttpClient client = HttpClient.newHttpClient();
-        // and create its url
-        HttpRequest request = HttpRequest.newBuilder(URI.create("https://archlinux.org/packages/search/json/?name="+packageName)).build();
-        // send its url and return the string given
-        return client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
-    }
+
+@Override
+public CompletableFuture<Pair<Package, Set<String>>> getPackageFromAPI(String packageName) {
+    // create a new http client
+    HttpClient client = HttpClient.newHttpClient();
+    // and create its url
+    HttpRequest request = HttpRequest.newBuilder(URI.create("https://archlinux.org/packages/search/json/?name="+packageName)).build();
+
+    CompletableFuture<Pair<Package, Set<String>>> futureResult = new CompletableFuture<>();
+    client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenAccept(result ->{
+
+        JSONObject json = new JSONObject(result.body());
+
+        JSONArray resultsArrayJson = json.getJSONArray("results");
+        if(resultsArrayJson.length()==0){
+            // unknown package, probably an abstract dependency
+            futureResult.complete(null);
+            return;
+        }
+        JSONObject resultJson = resultsArrayJson.getJSONObject(0);
+
+        // get infos
+
+        Set<String> dependenciesNames = new HashSet<>();
+        for(Object dependency : resultJson.getJSONArray("depends")){
+            dependenciesNames.add((String)dependency);
+        }
+        futureResult.complete(new Pair<>(
+                new Package(
+                        resultJson.getString("pkgname"),
+                        resultJson.getString("pkgver"),
+                        resultJson.getString("repo"),
+                        resultJson.getString("pkgdesc")
+                ),
+                dependenciesNames
+        ));
+    });
+
+    return futureResult;
+
+}
 
 
 /**
@@ -73,86 +105,5 @@ public class ArchDistribution implements Distribution {
 
         return searchedPackagesList;
 
-    }
-
-
-    /**
-     * Will generate a dependencies tree of depth 'depth' given the package name
-     * @param packageName the package name to search
-     * @param depth depth to search dependencies
-     * @return new Package
-     */
-    public CompletableFuture<Package> getPackageTree(String packageName, int depth) {
-
-        // parse the json
-        var futurePackage = new CompletableFuture<Package>();
-
-        logger.fine("Querying package %s from API... (depth=%s)".formatted(packageName, depth));
-
-        CompletableFuture<HttpResponse<String>> futureRequest;
-        try{
-            futureRequest = getPackageFromAPI(packageName);
-        }catch(IllegalArgumentException e){
-            logger.warning("Caught exception for package %s :\n%s".formatted(packageName, e));
-            return CompletableFuture.completedFuture(null);
-        }
-        futureRequest.thenAccept(result->{
-            List<Package> deps = new ArrayList<>();
-            String name, version, repo, description;
-
-            JSONObject json = new JSONObject(result.body());
-
-            JSONArray resultsArrayJson = json.getJSONArray("results");
-            if(resultsArrayJson.length()==0){
-                // unknown package, probably an abstract dependency
-                logger.fine("Completing callback INVALID for package %s (depth=%s)".formatted(packageName, depth));
-                futurePackage.complete(null);
-                return;
-            }
-            JSONObject resultJson = resultsArrayJson.getJSONObject(0);
-
-            // get infos except dependencies
-            name = resultJson.getString("pkgname");
-            version = resultJson.getString("pkgver");
-            repo = resultJson.getString("repo");
-            description = resultJson.getString("pkgdesc");
-
-            // if we're at the maximum depth, return the package without its dependencies
-            if(depth==0) {
-                logger.fine("Completing callback NODEP for package %s (depth=%s)".formatted(packageName, depth));
-                futurePackage.complete(new Package(name, version, repo, description, Collections.emptyList()));
-                return;
-            }
-            // iterate for every package in the list
-            List<CompletableFuture<Package>> futureDeps = new ArrayList<>();
-            for (Object depPackageNameObj : resultJson.getJSONArray("depends")) {
-                // convert object into String
-                String depPackageName = (String) depPackageNameObj;
-                // add package into Package List
-                futureDeps.add(getPackageTree(depPackageName, depth - 1));
-            }
-            for(CompletableFuture<Package> future : futureDeps){
-                Package dep;
-                try {
-                    dep = future.get();
-                } catch (InterruptedException | ExecutionException e) {
-                    throw new RuntimeException(e);
-                }
-                if(dep!=null){
-                    deps.add(dep);
-                }
-            }
-
-            // TODO this doesn't seem clean
-            logger.fine("Completing callback DEPS for package %s (depth=%s)".formatted(packageName, depth));
-            futurePackage.complete(new Package(name, version, repo, description, deps));
-        }).exceptionally((e2->{
-            logger.warning("Error while fetching package %s (depth=%s) from the API : \n%s".formatted(packageName, depth, e2));
-            e2.printStackTrace();
-            futurePackage.complete(null);
-            return null;
-        }));
-
-        return futurePackage;
     }
 }
