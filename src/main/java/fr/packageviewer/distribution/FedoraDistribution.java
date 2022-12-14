@@ -56,7 +56,7 @@ public class FedoraDistribution extends AsyncRequestsParser implements Distribut
                     new Package(
                             json.getString("basename"),
                             json.getString("version"),
-                            json.getString("repo"),
+                            "rawhide",
                             json.getString("description"),
                             "fedora"
                     ),
@@ -104,7 +104,7 @@ public class FedoraDistribution extends AsyncRequestsParser implements Distribut
                     searchedPackagesList.add(new SearchedPackage(
                             name,
                             null,
-                            null,
+                            "rawhide",
                             searchResultJson.getString("description"),
                             "fedora"
                     ));
