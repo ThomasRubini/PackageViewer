@@ -2,11 +2,6 @@ package fr.packageviewer;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
-
-import fr.packageviewer.distribution.ArchDistribution;
-import fr.packageviewer.pack.Package;
 
 public class Main {
 
@@ -40,14 +35,40 @@ public class Main {
 		}
 	}
 
+	private static void searchForAll(String packet) {
+	}
+
+	private static void searchForArch(String packet) {
+	}
+
+	private static void searchForFedora(String packet) {
+	}
+
 	public static void main(String[] args) {
 		// send the command line arguments to the parser
 		ArgParse.parseArguments(args);
 		String packet = ArgParse.getPacket();
 		String distribution = ArgParse.getDistribution();
+		distribution = processDistribution(distribution);
 
 		System.out.println(packet);
-		distribution = processDistribution(distribution);
 		System.out.println(distribution);
+
+		// distribution is null when no distribution is specified
+		if(distribution == null) {
+			searchForAll(packet);
+		} else {
+			switch (distribution) {
+				case "archlinux":
+					searchForArch(packet);
+					break;
+				case "fedora":
+					searchForFedora(packet);
+					break;
+				default:
+					System.out.println("Error: Unknown");
+					break;
+			}
+		}
 	}
 }
