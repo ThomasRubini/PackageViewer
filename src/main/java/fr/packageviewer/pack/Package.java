@@ -63,7 +63,7 @@ public class Package extends SearchedPackage {
     /**
      * Returns a string reprensentation of the package
      * 
-     * @return String, Description of the package
+     * @return String, string reprensentation of the package
      */
     @Override
     public String toString() {
