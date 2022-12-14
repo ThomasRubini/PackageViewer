@@ -60,12 +60,13 @@ public class SearchedPackage {
     public String getDescription() {
         return description;
     }
+
     /**
      * Constructor for the SearchedPackage class
      * 
-     * @param name String, name of the package
-     * @param version String,  version of the package
-     * @param repo String, repository where the package is located
+     * @param name        String, name of the package
+     * @param version     String, version of the package
+     * @param repo        String, repository where the package is located
      * @param description String, description of the package
      * 
      */
