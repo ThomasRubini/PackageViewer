@@ -1,6 +1,5 @@
 package fr.packageviewer.distribution;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 import java.net.http.*;
@@ -14,8 +13,6 @@ import java.util.logging.Logger;
 import fr.packageviewer.pack.Package;
 import fr.packageviewer.pack.SearchedPackage;
 import fr.packageviewer.LoggerManager;
-import fr.packageviewer.pack.Package;
-import fr.packageviewer.pack.SearchedPackage;
 
 public class FedoraDistribution extends AsyncRequestsParser implements Distribution {
 
@@ -97,9 +94,9 @@ public class FedoraDistribution extends AsyncRequestsParser implements Distribut
                 JSONObject searchResultJson = (JSONObject) searchResultObj;
                 // add package into to list
                 searchedPackagesList.add(new SearchedPackage(
-                        searchResultJson.getString("neofetch"),
+                        searchResultJson.getString("name"),
                         null,
-                        searchResultJson.getString("fullname"),
+                        null,
                         searchResultJson.getString("description")));
             }
             futureSearchedPackages.complete(searchedPackagesList);
