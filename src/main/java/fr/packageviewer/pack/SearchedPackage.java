@@ -24,6 +24,7 @@ public class SearchedPackage {
      * Description of the package
      */
     private final String description;
+    private final String distribution;
 
     /**
      * Getter for the name attribute
@@ -61,6 +62,11 @@ public class SearchedPackage {
         return description;
     }
 
+
+    public String getDistribution() {
+        return distribution;
+    }
+
     /**
      * Constructor for the SearchedPackage class
      * 
@@ -70,11 +76,12 @@ public class SearchedPackage {
      * @param description String, description of the package
      * 
      */
-    public SearchedPackage(String name, String version, String repo, String desciption) {
+    public SearchedPackage(String name, String version, String repo, String description, String distribution) {
         this.name = name;
         this.version = version;
         this.repo = repo;
-        this.description = desciption;
+        this.description = description;
+        this.distribution = distribution;
     }
 
     /**
@@ -84,6 +91,6 @@ public class SearchedPackage {
      */
     @Override
     public String toString() {
-        return "SearchedPackage{name=%s,version=%s,repo=%s,description=%s}".formatted(name, version, repo, description);
+        return "SearchedPackage{name=%s,version=%s,repo=%s,description=%s,distribution=%s}".formatted(name, version, repo, description, distribution);
     }
 }

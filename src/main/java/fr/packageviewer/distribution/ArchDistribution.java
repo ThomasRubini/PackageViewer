@@ -29,6 +29,14 @@ public class ArchDistribution extends AsyncRequestsParser implements Distributio
      */
     private static final Logger logger = LoggerManager.getLogger("ArchDistribution");
 
+    private static String trimAfterCharacters(String str, String trimAfterCharacters){
+        for(char c : trimAfterCharacters.toCharArray()){
+            int index = str.indexOf(c);
+            if(index>0)str = str.substring(index);
+        }
+        return str;
+    }
+
     /**
      * This function return a package from arch package api in the form of a Pair
      * Composed of a Package object, and a set of string containing the names of
@@ -61,17 +69,20 @@ public class ArchDistribution extends AsyncRequestsParser implements Distributio
             // get infos
 
             Set<String> dependenciesNames = new HashSet<>();
-            for (Object dependency : resultJson.getJSONArray("depends")) {
-                dependenciesNames.add((String) dependency);
+            for(Object dependency : resultJson.getJSONArray("depends")){
+                dependenciesNames.add(trimAfterCharacters((String)dependency, "<>="));
             }
             futureResult.complete(new Pair<>(
                     new Package(
                             resultJson.getString("pkgname"),
                             resultJson.getString("pkgver"),
                             resultJson.getString("repo"),
-                            resultJson.getString("pkgdesc")),
-                    dependenciesNames));
-        }).exceptionally(error -> {
+                            resultJson.getString("pkgdesc"),
+                            "arch"
+                    ),
+                    dependenciesNames
+            ));
+        }).exceptionally(error ->{
             error.printStackTrace();
             logger.warning("Error while fetching package %s from the API : \n%s".formatted(packageName, error));
             futureResult.complete(null);
@@ -81,6 +92,7 @@ public class ArchDistribution extends AsyncRequestsParser implements Distributio
         return futureResult;
 
     }
+
 
     /**
      * Search for a package matching a pattern and return a list of packages and
@@ -108,10 +120,12 @@ public class ArchDistribution extends AsyncRequestsParser implements Distributio
                 JSONObject searchResultJson = (JSONObject) searchResultObj;
                 // add package into to list
                 searchedPackagesList.add(new SearchedPackage(
-                        searchResultJson.getString("pkgname"),
-                        searchResultJson.getString("pkgver"),
-                        searchResultJson.getString("repo"),
-                        searchResultJson.getString("pkgdesc")));
+                    searchResultJson.getString("pkgname"),
+                    searchResultJson.getString("pkgver"),
+                    searchResultJson.getString("repo"),
+                    searchResultJson.getString("pkgdesc"),
+                    "arch"
+                ));
             }
             futureSearchedPackages.complete(searchedPackagesList);
         }).exceptionally(error -> {

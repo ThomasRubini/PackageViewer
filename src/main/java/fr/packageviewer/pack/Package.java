@@ -43,8 +43,8 @@ public class Package extends SearchedPackage {
      * @param repo        String, repository where the package is located
      * @param description String, description of the package
      */
-    public Package(String name, String version, String repo, String description) {
-        this(name, version, repo, description, new ArrayList<>());
+    public Package(String name, String version, String repo, String description,String distribution) {
+        this(name, version, repo, description, distribution, new ArrayList<>());
     }
 
     /**
@@ -56,8 +56,8 @@ public class Package extends SearchedPackage {
      * @param description String, description of the package
      * @param deps        List of Package, dependencies of the package
      */
-    public Package(String name, String version, String repo, String description, List<Package> deps) {
-        super(name, version, repo, description);
+    public Package(String name, String version, String repo, String description,String distribution, List<Package> deps) {
+        super(name, version, repo, description, distribution);
         this.deps = deps;
     }
     /**

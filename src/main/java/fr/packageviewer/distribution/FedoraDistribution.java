@@ -1,6 +1,5 @@
 package fr.packageviewer.distribution;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 import java.net.http.*;
@@ -14,8 +13,6 @@ import java.util.logging.Logger;
 import fr.packageviewer.pack.Package;
 import fr.packageviewer.pack.SearchedPackage;
 import fr.packageviewer.LoggerManager;
-import fr.packageviewer.pack.Package;
-import fr.packageviewer.pack.SearchedPackage;
 
 /**
  * This class handles package requests for Fedora. All return objects in
@@ -78,9 +75,12 @@ public class FedoraDistribution extends AsyncRequestsParser implements Distribut
                             json.getString("basename"),
                             json.getString("version"),
                             json.getString("repo"),
-                            json.getString("description")),
-                    dependenciesNames));
-        }).exceptionally(error -> {
+                            json.getString("description"),
+                            "fedora"
+                    ),
+                    dependenciesNames
+            ));
+        }).exceptionally(error->{
             error.printStackTrace();
             logger.warning("Error while fetching package %s from the API : \n%s".formatted(packageName, error));
             futureResult.complete(null);
@@ -120,10 +120,12 @@ public class FedoraDistribution extends AsyncRequestsParser implements Distribut
                 JSONObject searchResultJson = (JSONObject) searchResultObj;
                 // add package into to list
                 searchedPackagesList.add(new SearchedPackage(
-                        searchResultJson.getString("neofetch"),
+                        searchResultJson.getString("name"),
                         null,
-                        searchResultJson.getString("fullname"),
-                        searchResultJson.getString("description")));
+                        null,
+                        searchResultJson.getString("description"),
+                        "fedora"
+                ));
             }
             futureSearchedPackages.complete(searchedPackagesList);
         }).exceptionally(error -> {
