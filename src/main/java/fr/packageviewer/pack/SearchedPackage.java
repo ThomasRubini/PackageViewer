@@ -22,11 +22,11 @@ public class SearchedPackage {
         return description;
     }
 
-    public SearchedPackage(String name, String version, String repo, String desciption) {
+    public SearchedPackage(String name, String version, String repo, String description) {
         this.name = name;
         this.version = version;
         this.repo = repo;
-        this.description = desciption;
+        this.description = description;
     }
 
     @Override
