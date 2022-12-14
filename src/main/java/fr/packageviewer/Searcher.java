@@ -13,7 +13,7 @@ public class Searcher {
     public static List<SearchedPackage> searchForAll(String packet) {
 		// init distribution  to search in it
 		Distribution arch = new ArchDistribution();
-		Distribution fedora = new ArchDistribution();
+		Distribution fedora = new FedoraDistribution();
 		// search for the package in the distribution
 		Future<List<SearchedPackage>> archPackages = arch.searchPackage(packet);
 		Future<List<SearchedPackage>> fedoraPackages = fedora.searchPackage(packet);
