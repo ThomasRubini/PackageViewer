@@ -93,14 +93,23 @@ public class FedoraDistribution extends AsyncRequestsParser implements Distribut
             for (Object searchResultObj : json.getJSONArray("projects")) {
                 // convert object into String
                 JSONObject searchResultJson = (JSONObject) searchResultObj;
-                // add package into to list
-                searchedPackagesList.add(new SearchedPackage(
-                        searchResultJson.getString("name"),
-                        null,
-                        null,
-                        searchResultJson.getString("description"),
-                        "fedora"
-                ));
+
+                // get infos
+                String name = searchResultJson.getString("name");
+
+                // do not include fork projects in the list
+                if(!name.startsWith("fork/")){
+
+                    // add package into to list
+                    searchedPackagesList.add(new SearchedPackage(
+                            name,
+                            null,
+                            null,
+                            searchResultJson.getString("description"),
+                            "fedora"
+                    ));
+                }
+
             }
             futureSearchedPackages.complete(searchedPackagesList);
         }).exceptionally(error->{
