@@ -57,7 +57,8 @@ public class FedoraDistribution extends AsyncRequestsParser implements Distribut
                             json.getString("basename"),
                             json.getString("version"),
                             json.getString("repo"),
-                            json.getString("description")
+                            json.getString("description"),
+                            "fedora"
                     ),
                     dependenciesNames
             ));
@@ -97,7 +98,9 @@ public class FedoraDistribution extends AsyncRequestsParser implements Distribut
                         searchResultJson.getString("name"),
                         null,
                         null,
-                        searchResultJson.getString("description")));
+                        searchResultJson.getString("description"),
+                        "fedora"
+                ));
             }
             futureSearchedPackages.complete(searchedPackagesList);
         }).exceptionally(error->{

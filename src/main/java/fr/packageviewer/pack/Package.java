@@ -15,11 +15,11 @@ public class Package extends SearchedPackage {
         deps.add(pack);
     }
 
-    public Package(String name, String version, String repo, String description) {
-        this(name, version, repo, description, new ArrayList<>());
+    public Package(String name, String version, String repo, String description, String distribution) {
+        this(name, version, repo, description, distribution, new ArrayList<>());
     }
-    public Package(String name, String version, String repo, String description, List<Package> deps) {
-        super(name, version, repo, description);
+    public Package(String name, String version, String repo, String description, String distribution, List<Package> deps) {
+        super(name, version, repo, description, distribution);
         this.deps = deps;
     }
 
