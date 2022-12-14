@@ -24,6 +24,9 @@ import org.json.*;
  */
 public class ArchDistribution extends AsyncRequestsParser implements Distribution {
 
+    /**
+    * Logger object used to split debug output and the application output
+    */
     private static final Logger logger = LoggerManager.getLogger("ArchDistribution");
 
     /**
@@ -34,7 +37,6 @@ public class ArchDistribution extends AsyncRequestsParser implements Distributio
      * @param packageName String, The package's exact name
      * @return Pair of Package and Set of String
      */
-
     @Override
     public CompletableFuture<Pair<Package, Set<String>>> getPackageFromAPI(String packageName) {
         // create a new http client

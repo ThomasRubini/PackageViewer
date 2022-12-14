@@ -11,12 +11,34 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
+/**
+ * This abstract class defines the method that a distribution will use
+ * in order to get a package and fill its dependency list. It does all that 
+ * in an asyncron manner
+ * 
+ * @author R.Thomas
+ * @version 1.0
+ * 
+ */
 public abstract class AsyncRequestsParser {
-
+	/**
+    * Logger object used to split debug output and the application output
+    */
 	private static final Logger logger = LoggerManager.getLogger("AsyncRequestsParser");
 
+	/**
+     * This function return a package from the distribution's api in the form 
+	 * of a Pair Composed of a Package object, and a set of string containing 
+	 * the names of the dependecies of the package.
+     * 
+     * @param packageName String, The package's exact name
+     * @return Pair of Package and Set of String
+     */
 	protected abstract CompletableFuture<Pair<Package, Set<String>>> getPackageFromAPI(String name);
 
+	/**
+	 * 
+	 */
 	public CompletableFuture<Package> getPackageTree(String packageName, int depth) {
 		// parse the json
 		var futurePackage = new CompletableFuture<Package>();
