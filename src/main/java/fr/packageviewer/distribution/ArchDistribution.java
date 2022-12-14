@@ -19,6 +19,14 @@ public class ArchDistribution extends AsyncRequestsParser implements Distributio
 
     private static final Logger logger = LoggerManager.getLogger("ArchDistribution");
 
+    private static String trimAfterCharacters(String str, String trimAfterCharacters){
+        for(char c : trimAfterCharacters.toCharArray()){
+            int index = str.indexOf(c);
+            if(index>0)str = str.substring(index);
+        }
+        return str;
+    }
+
 /**
  * Will return the String json of the package from the Arch Linux API
  * @param packageName the package name to get the json from
@@ -49,7 +57,7 @@ public CompletableFuture<Pair<Package, Set<String>>> getPackageFromAPI(String pa
 
         Set<String> dependenciesNames = new HashSet<>();
         for(Object dependency : resultJson.getJSONArray("depends")){
-            dependenciesNames.add((String)dependency);
+            dependenciesNames.add(trimAfterCharacters((String)dependency, "<>="));
         }
         futureResult.complete(new Pair<>(
                 new Package(
