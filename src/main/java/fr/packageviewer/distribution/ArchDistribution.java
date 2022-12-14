@@ -29,10 +29,20 @@ public class ArchDistribution extends AsyncRequestsParser implements Distributio
      */
     private static final Logger logger = LoggerManager.getLogger("ArchDistribution");
 
-    private static String trimAfterCharacters(String str, String trimAfterCharacters){
-        for(char c : trimAfterCharacters.toCharArray()){
+    /**
+     * This method remove all characters in the first string passed as
+     * parametter after one of the character in the second string if found
+     * in the first string
+     *
+     * @param str                 String, the string to trim
+     * @param trimAfterCharacters String, the character that delimits our string
+     * @return
+     */
+    private static String trimAfterCharacters(String str, String trimAfterCharacters) {
+        for (char c : trimAfterCharacters.toCharArray()) {
             int index = str.indexOf(c);
-            if(index>0)str = str.substring(index);
+            if (index > 0)
+                str = str.substring(index);
         }
         return str;
     }
@@ -69,8 +79,8 @@ public class ArchDistribution extends AsyncRequestsParser implements Distributio
             // get infos
 
             Set<String> dependenciesNames = new HashSet<>();
-            for(Object dependency : resultJson.getJSONArray("depends")){
-                dependenciesNames.add(trimAfterCharacters((String)dependency, "<>="));
+            for (Object dependency : resultJson.getJSONArray("depends")) {
+                dependenciesNames.add(trimAfterCharacters((String) dependency, "<>="));
             }
             futureResult.complete(new Pair<>(
                     new Package(
@@ -78,11 +88,9 @@ public class ArchDistribution extends AsyncRequestsParser implements Distributio
                             resultJson.getString("pkgver"),
                             resultJson.getString("repo"),
                             resultJson.getString("pkgdesc"),
-                            "arch"
-                    ),
-                    dependenciesNames
-            ));
-        }).exceptionally(error ->{
+                            "arch"),
+                    dependenciesNames));
+        }).exceptionally(error -> {
             error.printStackTrace();
             logger.warning("Error while fetching package %s from the API : \n%s".formatted(packageName, error));
             futureResult.complete(null);
@@ -92,7 +100,6 @@ public class ArchDistribution extends AsyncRequestsParser implements Distributio
         return futureResult;
 
     }
-
 
     /**
      * Search for a package matching a pattern and return a list of packages and
@@ -120,12 +127,11 @@ public class ArchDistribution extends AsyncRequestsParser implements Distributio
                 JSONObject searchResultJson = (JSONObject) searchResultObj;
                 // add package into to list
                 searchedPackagesList.add(new SearchedPackage(
-                    searchResultJson.getString("pkgname"),
-                    searchResultJson.getString("pkgver"),
-                    searchResultJson.getString("repo"),
-                    searchResultJson.getString("pkgdesc"),
-                    "arch"
-                ));
+                        searchResultJson.getString("pkgname"),
+                        searchResultJson.getString("pkgver"),
+                        searchResultJson.getString("repo"),
+                        searchResultJson.getString("pkgdesc"),
+                        "arch"));
             }
             futureSearchedPackages.complete(searchedPackagesList);
         }).exceptionally(error -> {

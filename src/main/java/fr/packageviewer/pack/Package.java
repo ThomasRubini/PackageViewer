@@ -38,28 +38,34 @@ public class Package extends SearchedPackage {
      * Second constructor for the Package class, allows to create a package
      * without supplying a list of dependencies.
      * 
-     * @param name        String, name of the package
-     * @param version     String, version of the package
-     * @param repo        String, repository where the package is located
-     * @param description String, description of the package
+     * @param name         String, name of the package
+     * @param version      String, version of the package
+     * @param repo         String, repository where the package is located
+     * @param description  String, description of the package
+     * @param distribution String, the distribution where this specific package
+     *                     belongs
      */
-    public Package(String name, String version, String repo, String description,String distribution) {
+    public Package(String name, String version, String repo, String description, String distribution) {
         this(name, version, repo, description, distribution, new ArrayList<>());
     }
 
     /**
      * Main constructor for the Package class
      * 
-     * @param name        String, name of the package
-     * @param version     String, version of the package
-     * @param repo        String, repository where the package is located
-     * @param description String, description of the package
-     * @param deps        List of Package, dependencies of the package
+     * @param name         String, name of the package
+     * @param version      String, version of the package
+     * @param repo         String, repository where the package is located
+     * @param description  String, description of the package
+     * @param distribution String, the distribution where this specific package
+     *                     belongs
+     * @param deps         List of Package, dependencies of the package
      */
-    public Package(String name, String version, String repo, String description,String distribution, List<Package> deps) {
+    public Package(String name, String version, String repo, String description, String distribution,
+            List<Package> deps) {
         super(name, version, repo, description, distribution);
         this.deps = deps;
     }
+
     /**
      * Returns a string reprensentation of the package
      * 

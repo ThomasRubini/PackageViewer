@@ -24,6 +24,9 @@ public class SearchedPackage {
      * Description of the package
      */
     private final String description;
+    /**
+     * Distribution where this specific package belongs
+     */
     private final String distribution;
 
     /**
@@ -62,7 +65,11 @@ public class SearchedPackage {
         return description;
     }
 
-
+    /**
+     * Getter for the distribution attribute
+     * 
+     * @return String, distribution where this specific package belongs
+     */
     public String getDistribution() {
         return distribution;
     }
@@ -70,11 +77,12 @@ public class SearchedPackage {
     /**
      * Constructor for the SearchedPackage class
      * 
-     * @param name        String, name of the package
-     * @param version     String, version of the package
-     * @param repo        String, repository where the package is located
-     * @param description String, description of the package
-     * 
+     * @param name         String, name of the package
+     * @param version      String, version of the package
+     * @param repo         String, repository where the package is located
+     * @param description  String, description of the package
+     * @param distribution String, the distribution where this specific package
+     *                     belongs
      */
     public SearchedPackage(String name, String version, String repo, String description, String distribution) {
         this.name = name;
@@ -91,6 +99,7 @@ public class SearchedPackage {
      */
     @Override
     public String toString() {
-        return "SearchedPackage{name=%s,version=%s,repo=%s,description=%s,distribution=%s}".formatted(name, version, repo, description, distribution);
+        return "SearchedPackage{name=%s,version=%s,repo=%s,description=%s,distribution=%s}".formatted(name, version,
+                repo, description, distribution);
     }
 }
