@@ -70,13 +70,14 @@ public class Main {
 		}
 
 		for (int i = packets.size(); i-- > 0; ) {
+			SearchedPackage searchedPacket = packets.get(i);
 			System.out.printf("%s - %s/%s/%s %s%n\t%s%n",
 							  i,
-							  packets.get(i).getDistribution(),
-							  packets.get(i).getRepo(),
-							  packets.get(i).getName(),
-							  packets.get(i).getVersion(),
-							  packets.get(i).getDescription());
+							  searchedPacket.getDistribution(),
+							  searchedPacket.getRepo(),
+							  searchedPacket.getName(),
+							  searchedPacket.getVersion()==null?"":searchedPacket.getVersion(),
+							  searchedPacket.getDescription());
 		}
 	}
 }
