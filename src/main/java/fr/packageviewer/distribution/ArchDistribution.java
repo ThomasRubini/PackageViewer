@@ -15,14 +15,24 @@ import fr.packageviewer.pack.SearchedPackage;
 import fr.packageviewer.parser.AsyncRequestsParser;
 import org.json.*;
 
+/**
+ * This class handles package requests for Arch linux. All return objects in
+ * this class are wrapped by a CompletableFuture to ensure async workload.
+ * 
+ * @author C.Marla, R.Thomas 
+ * @version 1.0 
+ */
 public class ArchDistribution extends AsyncRequestsParser implements Distribution {
 
     private static final Logger logger = LoggerManager.getLogger("ArchDistribution");
 
 /**
- * Will return the String json of the package from the Arch Linux API
- * @param packageName the package name to get the json from
- * @return json of the package
+ * This function return a package from arch package api in the form of a Pair
+ * Composed of a Package object, and a set of string containing the names of 
+ * the dependecies of the package.
+ * 
+ * @param packageName String, The package's exact name
+ * @return Pair of Package and Set of String
   */
 
 @Override
@@ -72,9 +82,11 @@ public CompletableFuture<Pair<Package, Set<String>>> getPackageFromAPI(String pa
 }
 
 /**
- * Search for a package and return a list of packages
- * @param packageName the package name to search
- * @return
+ * Search for a package matching a pattern and return a list of packages and
+ * return a list of string matching this pattern.
+ * 
+ * @param packageName String, the pattern to search in the repositories
+ * @return List of SearchedPackage objects
  */
     public CompletableFuture<List<SearchedPackage>> searchPackage(String packageName){
         HttpClient client = HttpClient.newHttpClient();
