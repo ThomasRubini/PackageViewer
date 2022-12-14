@@ -11,7 +11,7 @@ public class CommandLineParams {
     /**
      * Packet the user want to search, only parameter without names
      */
-    @Parameter(description = "Packet to search",
+    @Parameter(description = "Package to search",
                 required = true)
     public String packet;
 
@@ -27,6 +27,7 @@ public class CommandLineParams {
      * Displays the help
      */
     @Parameter(names = {"--help", "-h"},
+               description = "Display this help",
                help = true,
                required = false)
     public boolean help = false;
