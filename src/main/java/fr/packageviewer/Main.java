@@ -47,9 +47,6 @@ public class Main {
 		String distribution = ArgParse.getDistribution();
 		distribution = processDistribution(distribution);
 
-		System.out.println(packet);
-		System.out.println(distribution);
-
 		// the list of packages we will show later
 		List<SearchedPackage> packets = new ArrayList<>();
 
@@ -73,8 +70,9 @@ public class Main {
 		}
 
 		for (int i = packets.size(); i-- > 0; ) {
-			System.out.printf("%s - %s/%s %s%n\t%s%n",
+			System.out.printf("%s - %s/%s/%s %s%n\t%s%n",
 							  i,
+							  packets.get(i).getDistribution(),
 							  packets.get(i).getRepo(),
 							  packets.get(i).getName(),
 							  packets.get(i).getVersion(),

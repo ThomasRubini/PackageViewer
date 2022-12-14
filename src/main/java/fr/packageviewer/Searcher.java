@@ -6,6 +6,7 @@ import java.util.concurrent.Future;
 
 import fr.packageviewer.distribution.ArchDistribution;
 import fr.packageviewer.distribution.Distribution;
+import fr.packageviewer.distribution.FedoraDistribution;
 import fr.packageviewer.pack.SearchedPackage;
 
 public class Searcher {
@@ -60,7 +61,7 @@ public class Searcher {
 	 */
 	public static List<SearchedPackage> searchForFedora(String packet) {
 		// init distribution  to search in it
-		Distribution fedora = new ArchDistribution();
+		Distribution fedora = new FedoraDistribution();
 		// search for the package in the distribution
 		Future<List<SearchedPackage>> packages = fedora.searchPackage(packet);
 		// init the list of packages that will be returned
