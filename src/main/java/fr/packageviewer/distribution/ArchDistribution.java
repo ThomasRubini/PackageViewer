@@ -25,8 +25,8 @@ import org.json.*;
 public class ArchDistribution extends AsyncRequestsParser implements Distribution {
 
     /**
-    * Logger object used to split debug output and the application output
-    */
+     * Logger object used to split debug output and the application output
+     */
     private static final Logger logger = LoggerManager.getLogger("ArchDistribution");
 
     /**
