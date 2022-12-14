@@ -31,6 +31,7 @@ public class ArgParse {
             if(params.help) {
                 jCommander.setProgramName("PackageViewer");
                 jCommander.usage();
+                System.exit(0);
             } else {
                 // store the argument parsed in the variable
                 packet = params.packet;
