@@ -56,7 +56,8 @@ public CompletableFuture<Pair<Package, Set<String>>> getPackageFromAPI(String pa
                         resultJson.getString("pkgname"),
                         resultJson.getString("pkgver"),
                         resultJson.getString("repo"),
-                        resultJson.getString("pkgdesc")
+                        resultJson.getString("pkgdesc"),
+                        "arch"
                 ),
                 dependenciesNames
         ));
@@ -98,7 +99,8 @@ public CompletableFuture<Pair<Package, Set<String>>> getPackageFromAPI(String pa
                     searchResultJson.getString("pkgname"),
                     searchResultJson.getString("pkgver"),
                     searchResultJson.getString("repo"),
-                    searchResultJson.getString("pkgdesc")
+                    searchResultJson.getString("pkgdesc"),
+                    "arch"
                 ));
             }
            futureSearchedPackages.complete(searchedPackagesList);
