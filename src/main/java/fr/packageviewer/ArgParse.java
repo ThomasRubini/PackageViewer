@@ -28,13 +28,20 @@ public class ArgParse {
         try {
             // parse the argument from list of String
             jCommander.parse(args);
-            // store the argument parsed in the variable
-            distribution = params.distribution;
-            packet = params.packet;
+            if(params.help) {
+                jCommander.setProgramName("PackageViewer");
+                jCommander.usage();
+            } else {
+                // store the argument parsed in the variable
+                packet = params.packet;
+                distribution = params.distribution;
+            }
 
         } catch (Exception e) {
             // if the parsing failed, print the error message and exit the program
             System.out.println("You forgot something, please enter the package name and the distribution name if you want to search in a specific one");
+            jCommander.setProgramName("PackageViewer");
+            jCommander.usage();
             System.exit(0);
         }
 	}
