@@ -37,6 +37,6 @@ public class SearchedPackage {
 
     @Override
     public String toString() {
-        return "SearchedPackage{name=%s,version=%s,repo=%s,description=%s}".formatted(name, version, repo, description);
+        return "SearchedPackage{name=%s,version=%s,repo=%s,description=%s,distribution=%s}".formatted(name, version, repo, description, distribution);
     }
 }
