@@ -2,7 +2,7 @@ package fr.packageviewer;
 
 /**
  * The Pair class stores two objects of distinct type
- * 
+ *
  * @author R.Thomas
  * @version 1.0
  */
@@ -19,7 +19,7 @@ public class Pair<K, V> {
 
 	/**
 	 * Main Constructor for the Pair class
-	 * 
+	 *
 	 * @param first, the first object to be stored
 	 * @param second the second object to be stored
 	 */
@@ -30,7 +30,7 @@ public class Pair<K, V> {
 
 	/**
 	 * Getter for the attribute first
-	 * 
+	 *
 	 * @return the object stored in the attribute first
 	 */
 	public K getFirst() {
@@ -39,7 +39,7 @@ public class Pair<K, V> {
 
 	/**
 	 * Setter for the attribute first
-	 * 
+	 *
 	 * @param first Store the given object in the attribute first
 	 */
 	public void setFirst(K first) {
@@ -48,7 +48,7 @@ public class Pair<K, V> {
 
 	/**
 	 * Getter for the attribute second
-	 * 
+	 *
 	 * @return the object stored in the attribute second
 	 */
 	public V getSecond() {
@@ -57,7 +57,7 @@ public class Pair<K, V> {
 
 	/**
 	 * Setter for the attribute second
-	 * 
+	 *
 	 * @param second Store the given object in the attribute second
 	 */
 	public void setSecond(V second) {
@@ -65,10 +65,10 @@ public class Pair<K, V> {
 	}
 
 	/**
-     * Returns a string representation of the pair
-     * 
-     * @return String, string representation of the pair
-     */
+	 * Returns a string representation of the pair
+	 *
+	 * @return String, string representation of the pair
+	 */
 	@Override
 	public String toString() {
 		return "Pair{key=%s,value=%s}".formatted(first, second);
