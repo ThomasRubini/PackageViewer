@@ -37,7 +37,7 @@ public class FrontendTerminal implements Frontend{
 							  searchedPacket.getDescription());
 		}
 
-        System.out.printf("Pick a package to see in details (0-%s) : %n", packets.size()-1);
+        System.out.printf("Pick a package to see in details (0-%s) : ", packets.size()-1);
 		Scanner input = new Scanner(System.in);
 
 		// we create vars for the loop
