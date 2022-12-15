@@ -40,12 +40,15 @@ You can launch tests with the task "test" : ./gradlew test`
 ## F.A.Q
 
 Q: Do I need Internet to use this ?
+
 A: yes, the project is using the distributions API to get package information.
 
 Q: Will {You beloved distribution} be supported in the future ?
+
 A: Depends on the price you are willing to pay.
 
 Q: Can I use this on my Nintendo Switch ?
+
 A: Yes, the Ubuntu version installed by switchroot has a recent enough version of java to run the program.
 
 ## Contributors
