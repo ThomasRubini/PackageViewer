@@ -17,7 +17,6 @@ public class ArgParse {
 	 * Get the command line argument given by the user, parse it with the parser and store it in the corresponding variable
 	 * @author Capelier-Marla
 	 * @param args the command line arguments given by the user
-	 * @return void
 	 */
 	static void parseArguments(String[] args) {
 		// create JCommander and CommandLineParams objects
@@ -48,7 +47,7 @@ public class ArgParse {
 	}
 
     /**
-     * Get the distribution name. If the user didn't give any or we didn't parsed, return null
+     * Get the distribution name. If the user didn't give any or if we didn't parse it, return null
      * @author Capelier-Marla
      * @return String: the distribution name
      */

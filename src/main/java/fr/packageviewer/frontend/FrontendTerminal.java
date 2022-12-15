@@ -1,10 +1,10 @@
 package fr.packageviewer.frontend;
 
-import java.util.List;
-import java.util.Scanner;
-
 import fr.packageviewer.pack.Package;
 import fr.packageviewer.pack.SearchedPackage;
+
+import java.util.List;
+import java.util.Scanner;
 
 public class FrontendTerminal implements Frontend{
 

@@ -1,25 +1,25 @@
 package fr.packageviewer;
 
+import fr.packageviewer.distribution.Distribution;
+import fr.packageviewer.pack.Package;
+import fr.packageviewer.pack.SearchedPackage;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import fr.packageviewer.distribution.Distribution;
-import fr.packageviewer.pack.SearchedPackage;
-import fr.packageviewer.pack.Package;
-
 public class Searcher {
 
-	private String distributionName = null;
+	private String distributionName;
 
 	public Searcher(String distributionName) {
 		this.distributionName = distributionName;
 	}
 
 	/**
-	 * Get the list of all packages in the distribution setted before
+	 * Get the list of all packages in the distribution set before
 	 * @param packageName the name of the package wanted
 	 * @return the list of all packages found
 	 * @author Capelier-Marla
@@ -31,7 +31,7 @@ public class Searcher {
 		if(distributionName == null) {
 			distributions = DistributionEnum.getAllDistributionsInstances();
 		} else {
-			distributions = Collections.singletonList(DistributionEnum.getDistributionContructorByName(distributionName));
+			distributions = Collections.singletonList(DistributionEnum.getDistributionConstructorByName(distributionName));
 			if(distributions.get(0) == null) {
 				System.out.println("Distribution non trouvée");
 				System.exit(0);
@@ -65,7 +65,7 @@ public class Searcher {
 			distributionName = packetInput.getDistribution();
 		}
 		String packageName = packetInput.getName();
-		Distribution distribution = DistributionEnum.getDistributionContructorByName(distributionName);
+		Distribution distribution = DistributionEnum.getDistributionConstructorByName(distributionName);
 		Future<Package> futurePacket = distribution.getPackageTree(packageName, 4);
 		Package packet = null;
 		try {

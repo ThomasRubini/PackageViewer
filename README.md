@@ -5,22 +5,22 @@
 
 PackageViewer permer de rechercher et de visualiser un paquet et les dependances du paquet pour une distribtion donnée.
 
-## Distribution supportées
+## Distributions supportées
 
 - Arch Linux (depots officiels)
 - Fedora
 
 ## Utilisation
 
-Pour utiliser notre projet vous pouvez cloner et build notre projet ou bien recuperer la [derniere build](https://nightly.link/ThomasRubini/PackageViewer/workflows/ci/main/PackageViewer%20jar.zip).
+Pour utiliser notre projet, vous pouvez cloner et build notre projet ou bien recuperer la [derniere build](https://nightly.link/ThomasRubini/PackageViewer/workflows/ci/main/PackageViewer%20jar.zip).
 
 ### parametres
 
-|  parametre  | description                                      |
-| ----------- | ------------------------------------------------ |
-| --help, -h  | Affiche l’aide                                   |
+| parametre                    | description                                            |
+|------------------------------|--------------------------------------------------------|
+| --help, -h                   | Affiche l’aide                                         |
 | --distro,-d <{distribution}> | Distribution linux dans la quelle rechercher le paquet |
-| --depth  <{profondeur}>  | Profondeur de l’arbre de dependance a afficher   | 
+| --depth  <{profondeur}>      | Profondeur de l’arbre de dependance a afficher         | 
 
 ### Exemples
 ```java -jar PackageViewer.jar -d fedora neofetch```

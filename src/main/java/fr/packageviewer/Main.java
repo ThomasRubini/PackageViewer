@@ -1,11 +1,11 @@
 package fr.packageviewer;
 
-import java.util.List;
-
 import fr.packageviewer.frontend.Frontend;
 import fr.packageviewer.frontend.FrontendFactory;
 import fr.packageviewer.pack.Package;
 import fr.packageviewer.pack.SearchedPackage;
+
+import java.util.List;
 
 public class Main {
 	public static void main(String[] args) {
@@ -27,10 +27,10 @@ public class Main {
 		// ask the user to select the package to see in details and store its name
 		SearchedPackage searchedPacketName = frontend.askUserToChoosePackage(packets);
 
-		// get all informations about the package by searching it in details
+		// get all information about the package by searching it in details
 		Package packet = searcher.getPackage(searchedPacketName);
 
-		// show all informations about a packet
+		// show all information about a packet
 		frontend.showPackageTree(packet, 0);
 	}
 }

@@ -65,9 +65,9 @@ public class Pair<K, V> {
 	}
 
 	/**
-     * Returns a string reprensentation of the pair
+     * Returns a string representation of the pair
      * 
-     * @return String, string reprensentation of the pair
+     * @return String, string representation of the pair
      */
 	@Override
 	public String toString() {

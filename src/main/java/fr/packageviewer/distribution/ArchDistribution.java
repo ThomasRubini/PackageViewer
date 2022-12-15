@@ -1,19 +1,20 @@
 package fr.packageviewer.distribution;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.*;
-
-import java.net.http.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.logging.Logger;
-
 import fr.packageviewer.LoggerManager;
 import fr.packageviewer.Pair;
 import fr.packageviewer.pack.Package;
 import fr.packageviewer.pack.SearchedPackage;
 import fr.packageviewer.parser.AsyncRequestsParser;
-import org.json.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.logging.Logger;
 
 /**
  * This class handles package requests for Arch linux. All return objects in
@@ -31,12 +32,12 @@ public class ArchDistribution extends AsyncRequestsParser implements Distributio
 
     /**
      * This method remove all characters in the first string passed as
-     * parametter after one of the character in the second string if found
+     * parameter after one of the character in the second string if found
      * in the first string
      *
      * @param str                 String, the string to trim
      * @param trimAfterCharacters String, the character that delimits our string
-     * @return
+     * @return the string after being trimmed
      */
     private static String trimAfterCharacters(String str, String trimAfterCharacters) {
         for (char c : trimAfterCharacters.toCharArray()) {
@@ -50,14 +51,14 @@ public class ArchDistribution extends AsyncRequestsParser implements Distributio
     /**
      * This function return a package from arch package api in the form of a Pair
      * Composed of a Package object, and a set of string containing the names of
-     * the dependecies of the package.
+     * the dependencies of the package.
      * 
      * @param packageName String, The package's exact name
      * @return Pair of Package and Set of String
      */
     @Override
     public CompletableFuture<Pair<Package, Set<String>>> getPackageFromAPI(String packageName) {
-        // create a new http client and he request for arch reseach api
+        // create a new http client and make a request to the arch research api
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest
                 .newBuilder(URI.create("https://archlinux.org/packages/search/json/?name=" + packageName)).build();
@@ -77,7 +78,7 @@ public class ArchDistribution extends AsyncRequestsParser implements Distributio
             }
             JSONObject resultJson = resultsArrayJson.getJSONObject(0);
             Set<String> dependenciesNames = new HashSet<>();
-            // parse depencies without version requirements (bash >= 3.0) -> (bash)
+            // parse dependencies without version requirements (bash >= 3.0) -> (bash)
             for (Object dependency : resultJson.getJSONArray("depends")) {
                 dependenciesNames.add(trimAfterCharacters((String) dependency, "<>="));
             }
