@@ -16,11 +16,11 @@ Pour utiliser notre projet vous pouvez cloner et build notre projet ou bien recu
 
 ### parametres
 
-|  parametre  | description                                      |
-| ----------- | ------------------------------------------------ |
-| --help, -h  | Affiche l’aide                                   |
+| parametre                    | description                                            |
+|------------------------------|--------------------------------------------------------|
+| --help, -h                   | Affiche l’aide                                         |
 | --distro,-d <{distribution}> | Distribution linux dans la quelle rechercher le paquet |
-| --depth  <{profondeur}>  | Profondeur de l’arbre de dependance a afficher   | 
+| --depth  <{profondeur}>      | Profondeur de l’arbre de dependance a afficher         | 
 
 ### Exemples
 ```java -jar PackageViewer.jar -d fedora neofetch```
