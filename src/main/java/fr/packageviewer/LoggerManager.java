@@ -5,7 +5,7 @@ import java.util.logging.*;
 /**
  * The LoggerManager class allows for basic debug output management using
  * Java's default logging class.
- * 
+ *
  * @author R.Thomas
  * @version 1.0
  */
@@ -17,7 +17,7 @@ public class LoggerManager {
 
 	/**
 	 * Static factory for the Logger class
-	 * 
+	 *
 	 * @param name String, of the logger to create
 	 * @return Logger, a new logger
 	 */
@@ -41,7 +41,7 @@ public class LoggerManager {
 		Handler handler = new StreamHandler(System.err, new SimpleFormatter());
 		logger.addHandler(handler);
 
-		
+
 		logger.setUseParentHandlers(false);
 		return logger;
 	}

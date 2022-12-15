@@ -20,6 +20,7 @@ public class Searcher {
 
 	/**
 	 * Get the list of all packages in the distribution set before
+	 *
 	 * @param packageName the name of the package wanted
 	 * @return the list of all packages found
 	 * @author Capelier-Marla
@@ -28,11 +29,11 @@ public class Searcher {
 
 		// we add all instanced constructors in a list, only one if defined at creation of the object
 		List<Distribution> distributions;
-		if(distributionName == null) {
+		if (distributionName == null) {
 			distributions = DistributionEnum.getAllDistributionsInstances();
 		} else {
 			distributions = Collections.singletonList(DistributionEnum.getDistributionConstructorByName(distributionName));
-			if(distributions.get(0) == null) {
+			if (distributions.get(0) == null) {
 				System.out.println("Distribution non trouvée");
 				System.exit(0);
 			}
@@ -48,7 +49,7 @@ public class Searcher {
 		}
 
 		// we get all packages waiting for them to be received
-		for(Future<List<SearchedPackage>> futurePackageList : listFuturePackagesList ) {
+		for (Future<List<SearchedPackage>> futurePackageList : listFuturePackagesList) {
 			try {
 				List<SearchedPackage> tempList = futurePackageList.get();
 				allPackages.addAll(tempList);
@@ -61,7 +62,7 @@ public class Searcher {
 
 
 	public Package getPackage(SearchedPackage packetInput) {
-		if(distributionName == null) {
+		if (distributionName == null) {
 			distributionName = packetInput.getDistribution();
 		}
 		String packageName = packetInput.getName();

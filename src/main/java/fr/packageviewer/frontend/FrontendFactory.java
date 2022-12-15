@@ -2,15 +2,11 @@ package fr.packageviewer.frontend;
 
 public class FrontendFactory {
 
-    public static Frontend get(String name){
-        switch(name){
-            case "terminal":{
-                return new FrontendTerminal();
-            }
-            default:{
-                throw new IllegalArgumentException("Invalid frontend");
-            }
-        }
-    }
+	public static Frontend get(String name) {
+		if (name.equals("terminal")) {
+			return new FrontendTerminal();
+		}
+		throw new IllegalArgumentException("Invalid frontend");
+	}
 
 }

@@ -15,10 +15,9 @@ import java.util.logging.Logger;
  * This abstract class defines the method that a distribution will use
  * in order to get a package and fill its dependency list. It does all that
  * in an asynchronous manner
- * 
+ *
  * @author R.Thomas
  * @version 1.0
- * 
  */
 public abstract class AsyncRequestsParser {
 	/**
@@ -30,7 +29,7 @@ public abstract class AsyncRequestsParser {
 	 * This function returns a package from the distribution's api in the form
 	 * of a Pair Composed of a Package object and a set of string containing
 	 * the names of the dependencies of the package.
-	 * 
+	 *
 	 * @param packageName String, The package's exact name
 	 * @return Pair of Package and Set of String
 	 */
@@ -42,7 +41,7 @@ public abstract class AsyncRequestsParser {
 	 * parameter, the package contains in its dependency list fully formed
 	 * packages that also contains its dependencies, the dependency depth is
 	 * specified by the parameter with the same name.
-	 * 
+	 *
 	 * @param packageName String, The package's exact name
 	 * @param depth       int, the depth of the dependency tree
 	 * @return Package, the fully completed package

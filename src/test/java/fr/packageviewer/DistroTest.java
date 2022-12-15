@@ -14,19 +14,21 @@ import java.util.concurrent.Future;
 public abstract class DistroTest<T extends Distribution> {
 
 	protected abstract T createInstance();
-	protected List<SearchedPackage> helperSearchPackage(String packageName){
+
+	protected List<SearchedPackage> helperSearchPackage(String packageName) {
 		Distribution distribution = createInstance();
 		Future<List<SearchedPackage>> future = distribution.searchPackage(packageName);
-		try{
+		try {
 			return future.get();
 		} catch (ExecutionException | InterruptedException e) {
 			throw new RuntimeException(e);
 		}
 	}
-	protected Package helperGetPackageTree(String packageName, int depth){
+
+	protected Package helperGetPackageTree(String packageName, int depth) {
 		Distribution distribution = createInstance();
 		Future<Package> future = distribution.getPackageTree(packageName, depth);
-		try{
+		try {
 			return future.get();
 		} catch (ExecutionException | InterruptedException e) {
 			throw new RuntimeException(e);
@@ -34,7 +36,7 @@ public abstract class DistroTest<T extends Distribution> {
 	}
 
 	@Test
-	public void testBasicQueryDoNotFail(){
+	public void testBasicQueryDoNotFail() {
 		helperGetPackageTree("bash", 0);
 	}
 
@@ -56,7 +58,7 @@ public abstract class DistroTest<T extends Distribution> {
 	public void testQueryWithDepth1hasOneLevelOfDeps() {
 		Package pack = helperGetPackageTree("bash", 1);
 		Assertions.assertNotEquals(pack.getDeps().size(), 0);
-		for(Package dep : pack.getDeps()){
+		for (Package dep : pack.getDeps()) {
 			Assertions.assertEquals(dep.getDeps().size(), 0);
 		}
 	}
@@ -83,10 +85,11 @@ public abstract class DistroTest<T extends Distribution> {
 	public void testThatBashSearchReturnsResults() {
 		Assertions.assertNotEquals(helperSearchPackage("bash").size(), 0);
 	}
+
 	@Test
 	public void testThatBashSearchContainsBash() {
-		for(SearchedPackage pack : helperSearchPackage("bash")){
-			if(pack.getName().equals("bash")){
+		for (SearchedPackage pack : helperSearchPackage("bash")) {
+			if (pack.getName().equals("bash")) {
 				Assertions.assertTrue(true);
 				return;
 			}
