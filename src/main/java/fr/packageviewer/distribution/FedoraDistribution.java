@@ -17,7 +17,7 @@ import fr.packageviewer.LoggerManager;
 /**
  * This class handles package requests for Fedora. All return objects in
  * this class are wrapped by a CompletableFuture to ensure async workload.
- * 
+ *
  * @author S.Djalim, R.Thomas
  * @version 1.0
  */
@@ -32,7 +32,7 @@ public class FedoraDistribution extends AsyncRequestsParser implements Distribut
      * This function return a package from Fedora metadata api in the form of a
      * Pair Composed of a Package object, and a set of string containing the
      * names of the dependecies of the package.
-     * 
+     *
      * @param packageName String, The package's exact name
      * @return Pair of Package and Set of String
      */
@@ -75,7 +75,7 @@ public class FedoraDistribution extends AsyncRequestsParser implements Distribut
                             json.getString("basename"),
                             json.getString("version"),
                             "rawhide",
-                            json.getString("description"),
+                            json.getString("summary"),
                             "fedora"
                     ),
                     dependenciesNames
@@ -93,7 +93,7 @@ public class FedoraDistribution extends AsyncRequestsParser implements Distribut
     /**
      * Search for a package matching a pattern and return a list of packages and
      * return a list of string matching this pattern.
-     * 
+     *
      * @param packageName String, the pattern to search in the repositories
      * @return List of SearchedPackage objects
      */
@@ -111,7 +111,7 @@ public class FedoraDistribution extends AsyncRequestsParser implements Distribut
 
         // send the request and when there's a response
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenAccept(result -> {
-            //parse the json response 
+            //parse the json response
             JSONObject json = new JSONObject(result.body());
 
             List<SearchedPackage> searchedPackagesList = new ArrayList<>();

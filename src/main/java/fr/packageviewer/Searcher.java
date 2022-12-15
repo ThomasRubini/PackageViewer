@@ -8,6 +8,7 @@ import java.util.concurrent.Future;
 
 import fr.packageviewer.distribution.Distribution;
 import fr.packageviewer.pack.SearchedPackage;
+import fr.packageviewer.pack.Package;
 
 public class Searcher {
 
@@ -56,5 +57,22 @@ public class Searcher {
 			}
 		}
 		return allPackages;
+	}
+
+
+	public Package getPackage(SearchedPackage packetInput) {
+		if(distributionName == null) {
+			distributionName = packetInput.getDistribution();
+		}
+		String packageName = packetInput.getName();
+		Distribution distribution = DistributionEnum.getDistributionContructorByName(distributionName);
+		Future<Package> futurePacket = distribution.getPackageTree(packageName, 4);
+		Package packet = null;
+		try {
+			packet = futurePacket.get();
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+		return packet;
 	}
 }

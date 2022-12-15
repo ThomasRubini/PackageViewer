@@ -68,9 +68,15 @@ public class FrontendTerminal implements Frontend{
     }
 
     @Override
-    public void showPackageTree(Package packet) {
-        // TODO Auto-generated method stub
-
+    public void showPackageTree(Package packet, int depth) {
+		System.out.printf("%s%s / %s : %s%n",
+                          "    ".repeat(depth),
+                          packet.getName(),
+                          packet.getVersion(),
+                          packet.getDescription());
+        for (Package dep : packet.getDeps()) {
+            showPackageTree(dep, depth+1);
+        }
     }
 
 }
