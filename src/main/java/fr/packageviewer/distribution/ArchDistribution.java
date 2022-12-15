@@ -37,7 +37,7 @@ public class ArchDistribution extends AsyncRequestsParser implements Distributio
      *
      * @param str                 String, the string to trim
      * @param trimAfterCharacters String, the character that delimits our string
-     * @return
+     * @return the string after being trimmed
      */
     private static String trimAfterCharacters(String str, String trimAfterCharacters) {
         for (char c : trimAfterCharacters.toCharArray()) {

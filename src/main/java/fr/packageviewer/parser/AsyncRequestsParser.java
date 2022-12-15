@@ -34,7 +34,7 @@ public abstract class AsyncRequestsParser {
 	 * @param packageName String, The package's exact name
 	 * @return Pair of Package and Set of String
 	 */
-	protected abstract CompletableFuture<Pair<Package, Set<String>>> getPackageFromAPI(String name);
+	protected abstract CompletableFuture<Pair<Package, Set<String>>> getPackageFromAPI(String packageName);
 
 	/**
 	 * This function returns a fully completed package containing all

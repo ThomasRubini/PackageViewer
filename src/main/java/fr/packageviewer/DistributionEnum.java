@@ -21,8 +21,8 @@ public enum DistributionEnum {
 
     /**
      * Contructor for enums
-     * @param name
-     * @param distributionConstructor
+     * @param name the name of the distribution
+     * @param distributionConstructor the instance of the distribution
      * @author Capelier-Marla
      */
     DistributionEnum(String name, Distribution distributionConstructor) {
@@ -49,7 +49,7 @@ public enum DistributionEnum {
 
     /**
      * Get all distribution instances available in this enum
-     * @return the set of distribution instances
+     * @return the list of distribution instances
      */
     public static List<Distribution> getAllDistributionsInstances() {
         // create the set that will be returned
