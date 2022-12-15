@@ -126,7 +126,7 @@ public class FedoraDistribution extends AsyncRequestsParser implements Distribut
 				String name = searchResultJson.getString("name");
 
 				// do not include fork projects in the list
-				if (!name.startsWith("fork/")) {
+				if (!searchResultJson.getString("fullname").startsWith("fork/")) {
 
 					// add package into to list
 					searchedPackagesList.add(new SearchedPackage(
