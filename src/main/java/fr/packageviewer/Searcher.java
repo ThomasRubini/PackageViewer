@@ -1,114 +1,66 @@
 package fr.packageviewer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import fr.packageviewer.distribution.ArchDistribution;
 import fr.packageviewer.distribution.Distribution;
-import fr.packageviewer.distribution.FedoraDistribution;
 import fr.packageviewer.pack.SearchedPackage;
-import fr.packageviewer.pack.Package;
 
 public class Searcher {
-    public static List<SearchedPackage> searchForAll(String packet) {
-		// init distribution  to search in it
-		Distribution arch = new ArchDistribution();
-		Distribution fedora = new FedoraDistribution();
-		// search for the package in the distribution
-		Future<List<SearchedPackage>> archPackages = arch.searchPackage(packet);
-		Future<List<SearchedPackage>> fedoraPackages = fedora.searchPackage(packet);
-		// init the list of packages that will be returned
-		List<SearchedPackage> archResult = new ArrayList<>();
-		List<SearchedPackage> fedoraResult = new ArrayList<>();
-		// try to get the searched packages to return it after
-		try {
-			archResult = archPackages.get();
-			fedoraResult = fedoraPackages.get();
-		} catch (Exception e) {
-			/* TODO: handle exception */
-		}
-		archResult.addAll(fedoraResult);
-		return archResult;
+
+	private String distributionName = null;
+
+	public Searcher() {}
+
+	public Searcher(String distributionName) {
+		this.distributionName = distributionName;
+	}
+
+	public void setDistribution(String distribution) {
+		this.distributionName = distribution;
 	}
 
 	/**
-	 * Search for the specified package in Arch repositories
-	 * @param packet the package to search
-	 * @return The list of packages that match the name
+	 * Get the list of all packages in the distribution setted before
+	 * @param packageName the name of the package wanted
+	 * @return the list of all packages found
 	 * @author Capelier-Marla
 	 */
-	public static List<SearchedPackage> searchForArch(String packet) {
-		// init distribution  to search in it
-		Distribution arch = new ArchDistribution();
-		// search for the package in the distribution
-		Future<List<SearchedPackage>> packages = arch.searchPackage(packet);
-		// init the list of packages that will be returned
-		List<SearchedPackage> result = new ArrayList<>();
-		// try to get the searched packages to return it after
-		try {
-			result = packages.get();
-		} catch (Exception e) {
-			/* TODO: handle exception */
-		}
-		return result;
-	}
+	public List<SearchedPackage> searchPackages(String packageName) {
 
-	/**
-	 * Search for the specified package in Fedora repositories
-	 * @param packet the package to search
-	 * @return The list of packages that match the name
-	 * @author Capelier-Marla
-	 */
-	public static List<SearchedPackage> searchForFedora(String packet) {
-		// init distribution  to search in it
-		Distribution fedora = new FedoraDistribution();
-		// search for the package in the distribution
-		Future<List<SearchedPackage>> packages = fedora.searchPackage(packet);
-		// init the list of packages that will be returned
-		List<SearchedPackage> result = new ArrayList<>();
-		// try to get the searched packages to return it after
-		try {
-			result = packages.get();
-		} catch (Exception e) {
-			/* TODO: handle exception */
+		// we add all instanced constructors in a list, only one if defined at creation of the object
+		List<Distribution> distributions;
+		if(distributionName == null) {
+			distributions = DistributionEnum.getAllDistributionsInstances();
+		} else {
+			distributions = Collections.singletonList(DistributionEnum.getDistributionContructorByName(distributionName));
+			if(distributions.get(0) == null) {
+				System.out.println("Distribution non trouvée");
+				System.exit(0);
+			}
 		}
-		return result;
-	}
+		// this is the list we will return containing all packages
+		List<SearchedPackage> allPackages = new ArrayList<>();
+		// this contains all future list of packages to get them after
+		List<Future<List<SearchedPackage>>> listFuturePackagesList = new ArrayList<>();
 
-	/**
-	 * Search for the specific package in the specific distribution, we need the searchedPackage to get informations about it like it name and distribution
-	 * @param pSearchedPackage the package to search for
-	 * @return a complete package with its dependencies
-	 * @author Capelier-Marla
-	 */
-	public static Package getPackage(SearchedPackage pSearchedPackage) {
-		// we get the name of the distribution of the package
-		String distName = pSearchedPackage.getDistribution();
-		// we create a distribution object
-		Distribution distribution;
-		switch (distName) {
-			case "archlinux":
-				distribution = new ArchDistribution();
-				break;
-			case "fedora":
-				distribution = new FedoraDistribution();
-				break;
-			default:
-				System.out.println("Error: Unknown");
-				System.exit(1);
-				return null;
+		// we add all future packages in a list
+		for (Distribution distribution : distributions) {
+			listFuturePackagesList.add(distribution.searchPackage(packageName));
 		}
-		// create the futue package we'll get from searching
-		Future<Package> packet = distribution.getPackageTree(pSearchedPackage.getName(), 4);
-		// object containing the package we're looking for
-		Package result;
-		try {
-			result = packet.get();
-		} catch (Exception e) {
-			return null;
+
+		// we get all packages waiting for them to be received
+		for(Future<List<SearchedPackage>> futurePackageList : listFuturePackagesList ) {
+			try {
+				List<SearchedPackage> tempList = futurePackageList.get();
+				allPackages.addAll(tempList);
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+			}
 		}
-		// return the package
-		return result;
+		return allPackages;
 	}
 }
