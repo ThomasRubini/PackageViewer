@@ -13,14 +13,8 @@ public class Searcher {
 
 	private String distributionName = null;
 
-	public Searcher() {}
-
 	public Searcher(String distributionName) {
 		this.distributionName = distributionName;
-	}
-
-	public void setDistribution(String distribution) {
-		this.distributionName = distribution;
 	}
 
 	/**
