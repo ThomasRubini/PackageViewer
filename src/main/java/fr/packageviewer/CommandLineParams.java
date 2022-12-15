@@ -19,8 +19,7 @@ public class CommandLineParams {
      * Distribution the user want to search packages in
      */
     @Parameter(names = {"--distro", "-d"},
-               description = "Linux distribution to search in",
-               required = false)
+               description = "Linux distribution to search in")
     public String distribution;
 
     /**
@@ -28,7 +27,6 @@ public class CommandLineParams {
      */
     @Parameter(names = {"--help", "-h"},
                description = "Display this help",
-               help = true,
-               required = false)
+               help = true)
     public boolean help = false;
 }
