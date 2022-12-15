@@ -2,6 +2,7 @@
 ![build Status](https://github.com/ThomasRubini/PackageViewer/actions/workflows/ci.yml/badge.svg)
 
 ## A propos
+
 PackageViewer permer de rechercher et de visualiser un paquet et les dependances du paquet pour une distribtion donnée.
 
 ## Distribution supportées
@@ -13,6 +14,15 @@ PackageViewer permer de rechercher et de visualiser un paquet et les dependances
 
 Pour utiliser notre projet vous pouvez cloner et build notre projet ou bien recuperer la [derniere build](https://nightly.link/ThomasRubini/PackageViewer/workflows/ci/main/PackageViewer%20jar.zip).
 
+### parametres
+
+|  parametre  | description                                      |
+| ----------- | ------------------------------------------------ |
+| --help, -h  | Affiche l’aide                                   |
+| --distro,-d <{distribution}> | Distribution linux dans la quelle rechercher le paquet |
+| --depth  <{profondeur}>  | Profondeur de l’arbre de dependance a afficher   | 
+
+### Exemples
 ```java -jar PackageViewer.jar -d fedora neofetch```
 
 
@@ -25,6 +35,8 @@ Pour build le projet il faut necessairement une version de java superieure a 15.
 Pour créer le fichier jar de notre projet il suffit de lancer la task "jar" du projet gradle :
 
 ```./gradlew jar```
+
+Vous retrouverez le fichier jar dans le dossier ```build/libs/```.
 
 Vous pouvez lancer les test en lançant la task "test" :
 
@@ -50,4 +62,3 @@ R: Oui, la version d'ubuntu que switchroot installe a une version assez recente 
 [SIMAILA Djalim](https://github.com/DjalimSimaila)
 
 [RUBINI Thomas](https://github.com/ThomasRubini)
-
