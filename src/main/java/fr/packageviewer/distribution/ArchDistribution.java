@@ -57,17 +57,18 @@ public class ArchDistribution extends AsyncRequestsParser implements Distributio
      */
     @Override
     public CompletableFuture<Pair<Package, Set<String>>> getPackageFromAPI(String packageName) {
-        // create a new http client
+        // create a new http client and he request for arch reseach api
         HttpClient client = HttpClient.newHttpClient();
-        // and create its url
         HttpRequest request = HttpRequest
                 .newBuilder(URI.create("https://archlinux.org/packages/search/json/?name=" + packageName)).build();
 
         CompletableFuture<Pair<Package, Set<String>>> futureResult = new CompletableFuture<>();
+        // send the request and when there's a response
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenAccept(result -> {
-
+            //parse the json response
             JSONObject json = new JSONObject(result.body());
-
+            
+            // check if the response contains something
             JSONArray resultsArrayJson = json.getJSONArray("results");
             if (resultsArrayJson.length() == 0) {
                 // unknown package, probably an abstract dependency
@@ -75,13 +76,12 @@ public class ArchDistribution extends AsyncRequestsParser implements Distributio
                 return;
             }
             JSONObject resultJson = resultsArrayJson.getJSONObject(0);
-
-            // get infos
-
             Set<String> dependenciesNames = new HashSet<>();
+            // parse depencies without version requirements (bash >= 3.0) -> (bash)
             for (Object dependency : resultJson.getJSONArray("depends")) {
                 dependenciesNames.add(trimAfterCharacters((String) dependency, "<>="));
             }
+            //Create the package and store it and its set of deps in a pair
             futureResult.complete(new Pair<>(
                     new Package(
                             resultJson.getString("pkgname"),
