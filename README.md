@@ -1,61 +1,54 @@
 # PackageViewer
 ![build Status](https://github.com/ThomasRubini/PackageViewer/actions/workflows/ci.yml/badge.svg)
 
-## A propos
+## What is this ?
 
-PackageViewer permer de rechercher et de visualiser un paquet et les dependances du paquet pour une distribtion donnée.
+PackageViewer is a project that allow people to search and visualize the dependencies tree of a package, for a given distribution
 
-## Distributions supportées
+## Supported distributions
 
-- Arch Linux (depots officiels)
-- Fedora
+- Arch Linux (official repositories only, not AUR)
+- Fedora (rawhide)
 
-## Utilisation
+## How to use
 
-Pour utiliser notre projet, vous pouvez cloner et build notre projet ou bien recuperer la [derniere build](https://nightly.link/ThomasRubini/PackageViewer/workflows/ci/main/PackageViewer%20jar.zip).
+You can either locally clone and compile the project, or use the [latest build](https://nightly.link/ThomasRubini/PackageViewer/workflows/ci/main/PackageViewer%20jar.zip).
 
-### parametres
+### Syntax
 
-| parametre                    | description                                            |
-|------------------------------|--------------------------------------------------------|
-| --help, -h                   | Affiche l’aide                                         |
-| --distro,-d <{distribution}> | Distribution linux dans la quelle rechercher le paquet |
-| --depth  <{profondeur}>      | Profondeur de l’arbre de dependance a afficher         | 
+| parameter                    | description                                     |
+|------------------------------|-------------------------------------------------|
+| --help, -h                   | Show help                                       |
+| --distro,-d <{distribution}> | (optional) Distribution to search the packet in |
 
-### Exemples
-```java -jar PackageViewer.jar -d fedora neofetch```
+### Examples
+```java -jar PackageViewer.jar neofetch```
 
 
-```java -jar PackageViewer.jar -d arch --depth 6 xorg-server```
+```java -jar PackageViewer.jar -d arch xorg-server```
 
 ## Build
 
-Pour build le projet il faut necessairement une version de java superieure a 15.
+To build the project, you will need at least Java 15
 
-Pour créer le fichier jar de notre projet il suffit de lancer la task "jar" du projet gradle :
+After cloning the repository, run `./gradlew jar` to generate the jar
 
-```./gradlew jar```
+It will be generated in `build/libs/`.
 
-Vous retrouverez le fichier jar dans le dossier ```build/libs/```.
-
-Vous pouvez lancer les test en lançant la task "test" :
-
-```./gradlew test```
-
-Dans le cas ou vous n'avez jamais utilisé gradle, l'executable ```gradlew``` se trouve a la racine du depot.
+You can launch tests with the task "test" : ./gradlew test`
 
 ## F.A.Q
 
-Q: Est ce qu'il me faut internet pour utiliser ce programme?
-R: Oui, il fonctionne en faisant des requetes vers des api, sans connection c'est un peu plus compliqué.
+Q: Do I need Internet to use this ?
+A: yes, the project is using the distributions API to get package information.
 
-Q: Est ce que {votre distribution preferée} sera supportée dans le futur?
-R: Si elle fournit une api pour ses paquets, peut etre. Sinon non :).
+Q: Will {You beloved distribution} be supported in the future ?
+A: Depends on the price you are willing to pay.
 
-Q: Est ce que je peux l'utiliser sur ma Nintendo Switch?
-R: Oui, la version d'ubuntu que switchroot installe a une version assez recente de java pour lancer le programme.
+Q: Can I use this on my Nintendo Switch ?
+A: Yes, the Ubuntu version installed by switchroot has a recent enough version of java to run the program.
 
-## Contributeurs
+## Contributors
 
 [CAPELIER Marla](https://github.com/Capelier-Marla)
 
