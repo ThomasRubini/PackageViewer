@@ -48,7 +48,7 @@ public abstract class AsyncRequestsParser {
 	 * @return Package, the fully completed package
 	 */
 	public CompletableFuture<Package> getPackageTree(String packageName, int depth) {
-		// parse the json
+		//Wrapper for the package that we'll return
 		var futurePackage = new CompletableFuture<Package>();
 
 		logger.fine("Querying package %s from API... (depth=%s)".formatted(packageName, depth));
@@ -57,11 +57,14 @@ public abstract class AsyncRequestsParser {
 		try {
 			futureRequest = getPackageFromAPI(packageName);
 		} catch (IllegalArgumentException e) {
+			// If we can't get the package from the api return a null object
 			logger.warning("Caught exception for package %s :\n%s".formatted(packageName, e));
 			return CompletableFuture.completedFuture(null);
 		}
+		// When we get the response from the request
 		futureRequest.thenAccept(result -> {
 			if (result == null) {
+				// if there's no response return null object
 				logger.fine("Completing callback INVALID for package %s (depth=%s)".formatted(packageName, depth));
 				futurePackage.complete(null);
 				return;
@@ -83,6 +86,8 @@ public abstract class AsyncRequestsParser {
 				// add package into Package List
 				futureDeps.add(getPackageTree(depPackageName, depth - 1));
 			}
+			// for each future in the list, get the actual package and store
+			// into the deps list of the packaqge
 			for (CompletableFuture<Package> future : futureDeps) {
 				Package dep;
 				try {
@@ -94,8 +99,6 @@ public abstract class AsyncRequestsParser {
 					pack.addDep(dep);
 				}
 			}
-
-			// TODO this doesn't seem clean
 			logger.fine("Completing callback DEPS for package %s (depth=%s)".formatted(packageName, depth));
 			futurePackage.complete(pack);
 		}).exceptionally(error -> {

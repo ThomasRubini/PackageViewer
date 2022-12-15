@@ -33,12 +33,15 @@ public class LoggerManager {
 	 * @return Logger, a new logger
 	 */
 	public static Logger getLogger(String name, Level level) {
+		// Create a logger and set its level
 		Logger logger = Logger.getLogger(name);
 		logger.setLevel(level);
 
+		// create an hanlder for standard error and add it to the logger
 		Handler handler = new StreamHandler(System.err, new SimpleFormatter());
 		logger.addHandler(handler);
 
+		
 		logger.setUseParentHandlers(false);
 		return logger;
 	}

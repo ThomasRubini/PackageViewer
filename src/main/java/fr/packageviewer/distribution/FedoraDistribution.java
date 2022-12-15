@@ -99,7 +99,7 @@ public class FedoraDistribution extends AsyncRequestsParser implements Distribut
      */
     @Override
     public CompletableFuture<List<SearchedPackage>> searchPackage(String packageName) {
-
+        // create an http client and the request for fedora's reseach api
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(
@@ -109,7 +109,9 @@ public class FedoraDistribution extends AsyncRequestsParser implements Distribut
 
         CompletableFuture<List<SearchedPackage>> futureSearchedPackages = new CompletableFuture<>();
 
+        // send the request and when there's a response
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenAccept(result -> {
+            //parse the json response 
             JSONObject json = new JSONObject(result.body());
 
             List<SearchedPackage> searchedPackagesList = new ArrayList<>();
