@@ -15,7 +15,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - uses: actions/setup-java@v3
+    - name: Setup Java
+      uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: 17
@@ -24,7 +25,8 @@ jobs:
       run: |
         ./gradlew jar
 
-    - uses: actions/upload-artifact@v3
+    - name: Upload PackageViewer jar
+      uses: actions/upload-artifact@v3
       with:
         name: PackageViewer jar
         path: ./build/libs/PackageViewer*.jar
@@ -37,11 +39,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - uses: actions/setup-java@v3
+    - name: Setup Java
+      uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: 17
 
-    - name: Run testsClassDiagram1
+    - name: Run tests
       run: |
         ./gradlew test
