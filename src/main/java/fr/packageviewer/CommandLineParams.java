@@ -1,8 +1,5 @@
 package fr.packageviewer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.beust.jcommander.Parameter;
 
 /**
@@ -10,11 +7,13 @@ import com.beust.jcommander.Parameter;
  * @author Capelier-Marla
  */
 public class CommandLineParams {
+
     /**
-     * List of parameters given by the user
+     * Packet the user want to search, only parameter without names
      */
-    @Parameter
-    public List<String> parameters = new ArrayList<>();
+    @Parameter(description = "Package to search",
+                required = true)
+    public String packet;
 
     /**
      * Distribution the user want to search packages in
@@ -23,4 +22,13 @@ public class CommandLineParams {
                description = "Linux distribution to search in",
                required = false)
     public String distribution;
+
+    /**
+     * Displays the help
+     */
+    @Parameter(names = {"--help", "-h"},
+               description = "Display this help",
+               help = true,
+               required = false)
+    public boolean help = false;
 }
