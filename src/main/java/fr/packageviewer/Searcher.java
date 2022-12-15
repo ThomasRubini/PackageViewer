@@ -12,7 +12,7 @@ import java.util.concurrent.Future;
 
 public class Searcher {
 
-	private String distributionName = null;
+	private String distributionName;
 
 	public Searcher(String distributionName) {
 		this.distributionName = distributionName;
