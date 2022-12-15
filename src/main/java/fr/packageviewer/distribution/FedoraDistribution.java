@@ -1,18 +1,19 @@
 package fr.packageviewer.distribution;
 
-import java.net.URI;
-import java.util.*;
-import java.net.http.*;
-
+import fr.packageviewer.LoggerManager;
 import fr.packageviewer.Pair;
-import fr.packageviewer.parser.AsyncRequestsParser;
-import org.json.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.logging.Logger;
-
 import fr.packageviewer.pack.Package;
 import fr.packageviewer.pack.SearchedPackage;
-import fr.packageviewer.LoggerManager;
+import fr.packageviewer.parser.AsyncRequestsParser;
+import org.json.JSONObject;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.logging.Logger;
 
 /**
  * This class handles package requests for Fedora. All return objects in

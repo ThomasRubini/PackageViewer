@@ -1,14 +1,14 @@
 package fr.packageviewer;
 
+import fr.packageviewer.distribution.Distribution;
+import fr.packageviewer.pack.Package;
+import fr.packageviewer.pack.SearchedPackage;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-
-import fr.packageviewer.distribution.Distribution;
-import fr.packageviewer.pack.SearchedPackage;
-import fr.packageviewer.pack.Package;
 
 public class Searcher {
 

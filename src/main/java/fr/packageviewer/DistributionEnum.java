@@ -1,11 +1,11 @@
 package fr.packageviewer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.packageviewer.distribution.ArchDistribution;
 import fr.packageviewer.distribution.Distribution;
 import fr.packageviewer.distribution.FedoraDistribution;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Enum containing contructors for each distribution to get them by their name
