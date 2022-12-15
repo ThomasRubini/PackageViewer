@@ -16,8 +16,8 @@ public enum DistributionEnum {
     FEDORA("fedora", new FedoraDistribution()),
     ;
 
-    private String name;
-    private Distribution distributionConstructor;
+    private final String name;
+    private final Distribution distributionConstructor;
 
     /**
      * Contructor for enums
