@@ -47,7 +47,7 @@ public class ArgParse {
 	}
 
     /**
-     * Get the distribution name. If the user didn't give any or we didn't parsed, return null
+     * Get the distribution name. If the user didn't give any or if we didn't parse it, return null
      * @author Capelier-Marla
      * @return String: the distribution name
      */

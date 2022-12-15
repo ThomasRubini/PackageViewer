@@ -32,7 +32,7 @@ public class FedoraDistribution extends AsyncRequestsParser implements Distribut
     /**
      * This function return a package from Fedora metadata api in the form of a
      * Pair Composed of a Package object, and a set of string containing the
-     * names of the dependecies of the package.
+     * names of the dependencies of the package.
      *
      * @param packageName String, The package's exact name
      * @return Pair of Package and Set of String
@@ -100,7 +100,7 @@ public class FedoraDistribution extends AsyncRequestsParser implements Distribut
      */
     @Override
     public CompletableFuture<List<SearchedPackage>> searchPackage(String packageName) {
-        // create an http client and the request for fedora's reseach api
+        // create a new http client and make a request to the fedora research api
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(

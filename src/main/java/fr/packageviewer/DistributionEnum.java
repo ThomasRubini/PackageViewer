@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Enum containing contructors for each distribution to get them by their name
+ * Enum containing distribution information to get them by their name
  * @author Capelier-Marla
  */
 public enum DistributionEnum {
@@ -20,7 +20,7 @@ public enum DistributionEnum {
     private final Distribution distributionConstructor;
 
     /**
-     * Contructor for enums
+     * Constructor for enums
      * @param name the name of the distribution
      * @param distributionConstructor the instance of the distribution
      * @author Capelier-Marla
@@ -36,8 +36,8 @@ public enum DistributionEnum {
      * @return the instance of the distribution requested
      * @author Capelier-Marla
      */
-    public static Distribution getDistributionContructorByName(String name) {
-        // loop for all ditributions stored in enum
+    public static Distribution getDistributionConstructorByName(String name) {
+        // loop for all distributions stored in enum
         for(var distrib : values()) {
             // return the instance if it's the same as enum name
             if(distrib.name.equals(name)) {
@@ -55,8 +55,8 @@ public enum DistributionEnum {
         // create the set that will be returned
         List<Distribution> result = new ArrayList<>();
         // add all the distribution instances in the set
-        for(var ditrib : values()) {
-            result.add(ditrib.distributionConstructor);
+        for(var distrib : values()) {
+            result.add(distrib.distributionConstructor);
         }
         return result;
     }

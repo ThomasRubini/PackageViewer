@@ -27,10 +27,10 @@ public class Main {
 		// ask the user to select the package to see in details and store its name
 		SearchedPackage searchedPacketName = frontend.askUserToChoosePackage(packets);
 
-		// get all informations about the package by searching it in details
+		// get all information about the package by searching it in details
 		Package packet = searcher.getPackage(searchedPacketName);
 
-		// show all informations about a packet
+		// show all information about a packet
 		frontend.showPackageTree(packet, 0);
 	}
 }

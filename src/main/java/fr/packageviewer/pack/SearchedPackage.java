@@ -93,9 +93,9 @@ public class SearchedPackage {
     }
 
     /**
-     * Returns a string reprensentation of the package
+     * Returns a string representation of the package
      * 
-     * @return String, string reprensentation of the package
+     * @return String, string representation of the package
      */
     @Override
     public String toString() {

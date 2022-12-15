@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 /**
  * This abstract class defines the method that a distribution will use
  * in order to get a package and fill its dependency list. It does all that
- * in an asyncron manner
+ * in an asynchronous manner
  * 
  * @author R.Thomas
  * @version 1.0
@@ -29,7 +29,7 @@ public abstract class AsyncRequestsParser {
 	/**
 	 * This function returns a package from the distribution's api in the form
 	 * of a Pair Composed of a Package object and a set of string containing
-	 * the names of the dependecies of the package.
+	 * the names of the dependencies of the package.
 	 * 
 	 * @param packageName String, The package's exact name
 	 * @return Pair of Package and Set of String
@@ -38,10 +38,10 @@ public abstract class AsyncRequestsParser {
 
 	/**
 	 * This function returns a fully completed package containing all
-	 * information about the package identified by it's exact name passed as
-	 * parametter, the package contains in its dependency list fully formed
+	 * information about the package identified by its exact name passed as
+	 * parameter, the package contains in its dependency list fully formed
 	 * packages that also contains its dependencies, the dependency depth is
-	 * specified by the parametter with the same name.
+	 * specified by the parameter with the same name.
 	 * 
 	 * @param packageName String, The package's exact name
 	 * @param depth       int, the depth of the dependency tree
@@ -87,7 +87,7 @@ public abstract class AsyncRequestsParser {
 				futureDeps.add(getPackageTree(depPackageName, depth - 1));
 			}
 			// for each future in the list, get the actual package and store
-			// into the deps list of the packaqge
+			// into the deps list of the package
 			for (CompletableFuture<Package> future : futureDeps) {
 				Package dep;
 				try {

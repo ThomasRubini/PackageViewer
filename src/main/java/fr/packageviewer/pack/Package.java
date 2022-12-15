@@ -11,21 +11,21 @@ import java.util.List;
  */
 public class Package extends SearchedPackage {
     /**
-     * List of package storing all of the dependencies of the package
+     * List of package storing all the dependencies of the package
      */
     private final List<Package> deps;
 
     /**
      * Getter for the deps attribute
      * 
-     * @return List, List of package storing all of the dependencies of the package
+     * @return List, List of package storing all the dependencies of the package
      */
     public List<Package> getDeps() {
         return deps;
     }
 
     /**
-     * This method adds to the dependency list the package passed as parametter.
+     * This method adds to the dependency list the package passed as parameter.
      * 
      * @param pack Package, the package to add as dependency
      */
@@ -66,9 +66,9 @@ public class Package extends SearchedPackage {
     }
 
     /**
-     * Returns a string reprensentation of the package
+     * Returns a string representation of the package
      * 
-     * @return String, string reprensentation of the package
+     * @return String, string representation of the package
      */
     @Override
     public String toString() {

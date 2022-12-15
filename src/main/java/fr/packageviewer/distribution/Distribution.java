@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.concurrent.Future;
 
 /**
- * This interface specifies the methods needed by a distribtion to be parsable.
+ * This interface specifies the methods needed by a distribution to be parsable.
  * 
  * @author R.Thomas
  * @version 1.0
@@ -24,10 +24,10 @@ public interface Distribution {
 
 	/**
 	 * This function returns a fully completed package containing all
-	 * information about the package identified by it's exact name passed as
-	 * parametter, the package contains in its dependency list fully formed
+	 * information about the package identified by its exact name passed as
+	 * parameter, the package contains in its dependency list fully formed
 	 * packages that also contains its dependencies, the dependency depth is
-	 * specified by the parametter with the same name.
+	 * specified by the parameter with the same name.
 	 * 
 	 * @param packageName String, The package's exact name
 	 * @param depth       int, the depth of the dependency tree
