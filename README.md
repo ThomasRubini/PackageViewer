@@ -1,31 +1,51 @@
 # PackageViewer
+![build Status](https://github.com/ThomasRubini/PackageViewer/actions/workflows/ci.yml/badge.svg)
+
 ## A propos
 PackageViewer permer de rechercher et de visualiser un paquet et les dependances du paquet pour une distribtion donnée.
 
-## Captures d'ecran
+## Distribution supportées
 
-TODO Meubler avec des screen
+- Arch Linux (depots officiels)
+- Fedora
 
 ## Utilisation
-```java -jar PackageViewer -d debian neofetch```
+
+Pour utiliser notre projet vous pouvez cloner et build notre projet ou bien recuperer la [derniere build](https://nightly.link/ThomasRubini/PackageViewer/workflows/ci/main/PackageViewer%20jar.zip).
+
+```java -jar PackageViewer.jar -d fedora neofetch```
 
 
-```java -jar PackageViewer -d archlinux --depth 6 xorg-server```
-
-Vous pouvez trouver plus de documentation sur le 
-[wiki](https://google.com/) 
-
-(TODO Changer le lien vers le wiki)
+```java -jar PackageViewer.jar -d arch --depth 6 xorg-server```
 
 ## Build
 
-TODO Meubler ici pour le gradle run.
+Pour build le projet il faut necessairement une version de java superieure a 15.
 
-TODO Meubler ici pour les tests.
+Pour créer le fichier jar de notre projet il suffit de lancer la task "jar" du projet gradle :
+
+```./gradlew jar```
+
+Vous pouvez lancer les test en lançant la task "test" :
+
+```./gradlew test```
+
+Dans le cas ou vous n'avez jamais utilisé gradle, l'executable ```gradlew``` se trouve a la racine du depot.
+
+## F.A.Q
+
+Q: Est ce qu'il me faut internet pour utiliser ce programme?
+R: Oui, il fonctionne en faisant des requetes vers des api, sans connection c'est un peu plus compliqué.
+
+Q: Est ce que {votre distribution preferée} sera supportée dans le futur?
+R: Si elle fournit une api pour ses paquets, peut etre. Sinon non :).
+
+Q: Est ce que je peux l'utiliser sur ma Nintendo Switch?
+R: Oui, la version d'ubuntu que switchroot installe a une version assez recente de java pour lancer le programme.
 
 ## Contributeurs
 
-[CAPELIER Marla](https://github.com/Capelier-Mathieu)
+[CAPELIER Marla](https://github.com/Capelier-Marla)
 
 [SIMAILA Djalim](https://github.com/DjalimSimaila)
 
